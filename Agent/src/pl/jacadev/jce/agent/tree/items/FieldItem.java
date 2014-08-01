@@ -13,10 +13,17 @@ public class FieldItem extends Item {
     private static final Image FIELD_ICON = new Image(Controller.class.getResourceAsStream("icons/fieldIcon.png"));
 
     private final Field field;
+    private final Object owner;
 
     public FieldItem(Field field) {
         setGraphic(new ImageView(FIELD_ICON));
         this.field = field;
+        this.owner = null;
+    }
+
+    public FieldItem(Field field, Object owner) {
+        this.field = field;
+        this.owner = owner;
     }
 
     public Field getField() {
@@ -29,12 +36,16 @@ public class FieldItem extends Item {
     }
 
     @Override
-    public void handleClick() {
-        Controller.CONTROLLER.openFieldMenu(field);
+    void handleClick() {
+        try {
+            Controller.CONTROLLER.openField(field, owner);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void handleBranchExpansion() {
+    void handleBranchExpansion() {
 
     }
 }

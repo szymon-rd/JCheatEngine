@@ -35,18 +35,9 @@ public class Controller implements Initializable {
         try {
             JCEAttacher.attachTo(pid);
         } catch (Exception e) {
-            exceptionOccurred(e);
+            e.printStackTrace();
         }
         handleRefreshAction(null);
-    }
-
-    @FXML
-    void handleOptionsAction(ActionEvent event) {
-    }
-
-    @FXML
-    void handleHelpAction(ActionEvent event) {
-
     }
 
     @FXML
@@ -57,12 +48,10 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CONTROLLER = this;
-        pidColumn.setCellValueFactory(new PropertyValueFactory<VM, String>("pid"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
+        pidColumn.setCellValueFactory(new PropertyValueFactory<>("pid"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         handleRefreshAction(null);
     }
 
-    public void exceptionOccurred(Exception e) {
-        e.printStackTrace();
-    }
+
 }

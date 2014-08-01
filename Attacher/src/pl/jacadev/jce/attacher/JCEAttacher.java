@@ -17,7 +17,7 @@ public class JCEAttacher {
     private static final Class[] classes = {
            Agent.class, Controller.class, FieldValueSetter.class, Mnemonics.class, AUtil.class,
             Item.class, ClassItem.class, MethodItem.class, FieldItem.class, PackageItem.class,
-            TextItem.class, Tree.class, TreeUtil.class, ApplicationMap.class, JCETreeCell.class
+            TextItem.class, ObjectItem.class, Tree.class, TreeUtil.class, ApplicationMap.class, JCETreeCell.class
     };
     private static final Resource[] resources = {
             new Resource("pl/jacadev/jce/agent/res/agent.fxml", Controller.class.getResourceAsStream("agent.fxml")),
@@ -37,6 +37,5 @@ public class JCEAttacher {
         });
         agent.setDaemon(true);
         agent.start();
-//        pl.jacadev.jce.attacher.res.Controller.CONTROLLER.handleRefreshAction(null);
     }
 }

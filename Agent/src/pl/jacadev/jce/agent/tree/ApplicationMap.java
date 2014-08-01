@@ -25,7 +25,7 @@ public class ApplicationMap {
                 .filter(a -> a.getName().startsWith(p.getName())).map(ClassItem::new).toArray(ClassItem[]::new);
     }
 
-    public static ClassItem[] getClassesInDefault(){
+    public static ClassItem[] getClassesInDefaultPack(){
         return Arrays.asList(TreeUtil.getLoadedClasses()).stream()
                 .filter(a -> !a.getName().contains(".")).map(ClassItem::new).toArray(ClassItem[]::new);
     }

@@ -11,6 +11,7 @@ public abstract class Item extends TreeItem<Item> {
         addEventHandler(TreeItem.branchExpandedEvent(), objectTreeModificationEvent -> handleBranchExpansion());
         setValue(this);
     }
-    public abstract void handleClick();
-    public abstract void handleBranchExpansion();
+
+    abstract void handleClick();
+    abstract void handleBranchExpansion();
 }

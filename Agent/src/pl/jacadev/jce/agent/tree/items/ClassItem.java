@@ -32,7 +32,7 @@ public class ClassItem extends Item {
     }
 
     @Override
-    public void handleClick() {
+    void handleClick() {
         if (!isLoaded) {
             openFields();
             openMethods();
@@ -41,7 +41,7 @@ public class ClassItem extends Item {
     }
 
     @Override
-    public void handleBranchExpansion() {
+    void handleBranchExpansion() {
 
     }
 

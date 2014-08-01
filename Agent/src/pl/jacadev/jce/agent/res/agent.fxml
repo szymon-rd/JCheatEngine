@@ -45,16 +45,17 @@
                                     </GridPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="593.0" visible="false">
+                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="593.0">
                                  <children>
                                     <GridPane layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
                                        <children>
                                           <Label layoutX="65.0" layoutY="103.0" text="Value:" GridPane.rowIndex="2" />
                                           <Label layoutX="65.0" layoutY="71.0" prefHeight="17.0" prefWidth="38.0" text="Type:" GridPane.rowIndex="1" />
                                           <Label layoutX="65.0" layoutY="42.0" prefHeight="17.0" prefWidth="38.0" text="Name:" />
-                                          <TextField fx:id="fieldValue" layoutX="128.0" layoutY="112.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="fieldValue" layoutX="128.0" layoutY="112.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <TextField fx:id="fieldName" editable="false" layoutX="128.0" layoutY="38.0" GridPane.columnIndex="1" />
                                           <TextField fx:id="fieldType" editable="false" layoutX="128.0" layoutY="76.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <ChoiceBox fx:id="fieldValueChoice" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -67,7 +68,8 @@
                                        </rowConstraints>
                                     </GridPane>
                                     <Button fx:id="setFieldBtn" layoutX="145.0" layoutY="91.0" mnemonicParsing="false" onAction="#handleSetField" prefHeight="17.0" prefWidth="56.0" text="Set" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="91.0" />
-                                    <Hyperlink layoutX="90.0" layoutY="92.0" onAction="#handleRefreshField" text="Refresh" />
+                                    <Hyperlink layoutX="206.0" layoutY="66.0" onAction="#handleRefreshField" text="Refresh" />
+                                    <Button fx:id="addFieldValueBtn" layoutX="67.0" layoutY="91.0" mnemonicParsing="false" onAction="#handleAddFieldValue" prefHeight="23.0" prefWidth="75.0" text="Add object" />
                                  </children>
                               </AnchorPane>
                            </children></AnchorPane>

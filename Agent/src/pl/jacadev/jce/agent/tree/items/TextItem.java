@@ -16,13 +16,12 @@ public class TextItem extends Item {
     }
 
     @Override
-    public void handleClick() {
-
+    void handleClick() {
 
     }
 
     @Override
-    public void handleBranchExpansion() {
+    void handleBranchExpansion() {
 
     }
 }

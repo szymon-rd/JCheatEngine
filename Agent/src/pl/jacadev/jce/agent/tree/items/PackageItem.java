@@ -61,12 +61,12 @@ public class PackageItem extends Item {
     }
 
     @Override
-    public void handleClick() {
+    void handleClick() {
 
     }
 
     @Override
-    public void handleBranchExpansion() {
+    void handleBranchExpansion() {
         loadClasses();
     }
 
