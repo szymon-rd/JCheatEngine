@@ -1,7 +1,9 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.cells;
 
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.MouseEvent;
+import pl.jacadev.jce.agent.tree.items.Item;
+
 
 /**
  * @author JacaDev
@@ -20,6 +22,9 @@ public class JCETreeCell extends TreeCell<Item> {
         } else {
             setText(getTreeItem().getValue().toString());
             setGraphic(getTreeItem().getGraphic());
+            getItem().updateCell(this);
         }
     }
+
+
 }

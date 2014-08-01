@@ -15,15 +15,14 @@ public class FieldItem extends Item {
     private final Field field;
     private final Object owner;
 
-    public FieldItem(Field field) {
+    public FieldItem(Field field, Object owner) {
         setGraphic(new ImageView(FIELD_ICON));
         this.field = field;
-        this.owner = null;
+        this.owner = owner;
     }
 
-    public FieldItem(Field field, Object owner) {
-        this.field = field;
-        this.owner = owner;
+    public FieldItem(Field field) {
+        this(field, null);
     }
 
     public Field getField() {
@@ -36,16 +35,11 @@ public class FieldItem extends Item {
     }
 
     @Override
-    void handleClick() {
+    public void handleClick() {
         try {
             Controller.CONTROLLER.openField(field, owner);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    void handleBranchExpansion() {
-
     }
 }

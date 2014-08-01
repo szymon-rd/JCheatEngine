@@ -52,7 +52,7 @@ public class Controller implements Initializable {
     private TextField fieldValue;
 
     @FXML
-    private ChoiceBox<ObjectItem> fieldValueChoice;
+    private ComboBox<ObjectItem> fieldValueChoice;
 
     @FXML
     private TextField fieldType;
@@ -66,7 +66,8 @@ public class Controller implements Initializable {
     @FXML
     void handleSetField(ActionEvent event) {
         try {
-            FieldValueSetter.setField(openedObject, openedField, fieldValue.getText());
+            if(isPrimitive(openedField)) FieldValueSetter.setField(openedObject, openedField, fieldValue.getText());
+            else FieldValueSetter.setField(openedObject, openedField, fieldValueChoice.getValue().getObject());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,10 +111,14 @@ public class Controller implements Initializable {
         fieldValue.setText("");
         fieldValueChoice.getItems().clear();
         addFieldValueBtn.setDisable(true);
+        setFieldBtn.setDisable(true);
         if (isPrimitive(field)) {
             fieldValue.setVisible(true);
             fieldValueChoice.setVisible(false);
-            if (isStatic(field) || obj != null) fieldValue.setText((String) field.get(obj));
+            if (isStatic(field) || obj != null){
+                fieldValue.setText(field.get(obj).toString());
+                setFieldBtn.setDisable(false);
+            }
         } else {
             fieldValue.setVisible(false);
             fieldValueChoice.setVisible(true);
@@ -121,6 +126,7 @@ public class Controller implements Initializable {
                 fieldValueChoice.setItems(Tree.getItems(field, obj));
                 fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));
                 addFieldValueBtn.setDisable(false);
+                setFieldBtn.setDisable(false);
             }
 
         }

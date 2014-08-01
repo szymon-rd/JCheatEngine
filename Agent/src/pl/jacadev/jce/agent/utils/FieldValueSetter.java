@@ -42,16 +42,20 @@ public class FieldValueSetter {
     }
 
     public static void setField(Object obj, Field field, String value) throws NoSuchFieldException {
-        if (isParsable(field.getType())) {
-            field.setAccessible(true);
-            if ((field.getModifiers() & Modifier.FINAL) != 0) makeSettable(field);
-            try {
-                field.set(obj, parsers.get(field.getType()).apply(value));
-            } catch (IllegalAccessException e) {
-                System.err.println("Exception! Name: " + field.getName() + " Modifiers: " + Modifier.toString(field.getModifiers()) + " Accessible: " + field.isAccessible());
-                e.printStackTrace();
-            }
-        } else throw new Error("field needs to be primitive or String");
+        if (isParsable(field.getType()))
+            setField(obj, field, parsers.get(field.getType()).apply(value));
+        else throw new Error("field needs to be primitive or String");
+    }
+
+    public static void setField(Object obj, Field field, Object value) throws NoSuchFieldException {
+        field.setAccessible(true);
+        if ((field.getModifiers() & Modifier.FINAL) != 0) makeSettable(field);
+        try {
+            field.set(obj, value);
+        } catch (IllegalAccessException e) {
+            System.err.println("Exception! Name: " + field.getName() + " Modifiers: " + Modifier.toString(field.getModifiers()) + " Accessible: " + field.isAccessible());
+            e.printStackTrace();
+        }
     }
 
     private static void makeSettable(Field field) {
@@ -67,7 +71,7 @@ public class FieldValueSetter {
             readOnly.setAccessible(true);
             readOnly.set(accessor, false);
 
-        } catch (ReflectiveOperationException  e) {
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
 

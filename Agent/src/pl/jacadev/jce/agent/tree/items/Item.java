@@ -1,6 +1,7 @@
 package pl.jacadev.jce.agent.tree.items;
 
 import javafx.scene.control.TreeItem;
+import pl.jacadev.jce.agent.tree.cells.JCETreeCell;
 
 /**
  * @author JacaDev
@@ -12,6 +13,16 @@ public abstract class Item extends TreeItem<Item> {
         setValue(this);
     }
 
-    abstract void handleClick();
-    abstract void handleBranchExpansion();
+    public boolean isEditable(){
+        return false;
+    }
+
+    public void handleClick(){
+    }
+    public void handleBranchExpansion(){
+    }
+    public void updateCell(JCETreeCell cell) {
+    }
+    public void commitEdit(String text) {
+    }
 }

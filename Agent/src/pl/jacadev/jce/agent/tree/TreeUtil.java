@@ -12,10 +12,10 @@ import java.util.Optional;
 public class TreeUtil {
     public static Class<?>[] getLoadedClasses(){
         return Arrays.asList(Agent.INSTRUMENTATION.getInitiatedClasses(ClassLoader.getSystemClassLoader()))
-                .stream().filter(a -> isCorrect(a.getName()) && !a.isArray()).toArray(Class[]::new);
+                .stream().filter(a -> isVisible(a.getName()) && !a.isArray()).toArray(Class[]::new);
     }
 
-    private static boolean isCorrect(String path){
+    private static boolean isVisible(String path){
         return !path.startsWith("pl.jacadev.jce") && !path.startsWith("javafx") && !path.startsWith("sun");
     }
 

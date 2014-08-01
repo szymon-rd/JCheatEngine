@@ -14,14 +14,4 @@ public class TextItem extends Item {
     public String toString() {
         return text;
     }
-
-    @Override
-    void handleClick() {
-
-    }
-
-    @Override
-    void handleBranchExpansion() {
-
-    }
 }

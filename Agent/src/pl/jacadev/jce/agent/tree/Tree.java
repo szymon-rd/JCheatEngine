@@ -4,6 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import pl.jacadev.jce.agent.tree.cells.EditableTreeCell;
+import pl.jacadev.jce.agent.tree.cells.JCETreeCell;
 import pl.jacadev.jce.agent.tree.items.*;
 import pl.jacadev.jce.agent.utils.AUtil;
 
@@ -24,7 +26,10 @@ public class Tree {
 
     @SuppressWarnings("unchecked")
     public static void createTree(TreeView<Item> tree) {
-        tree.setCellFactory(itemTreeView -> new JCETreeCell());
+        tree.setCellFactory(itemTreeView -> {
+            if(itemTreeView.isEditable()) return new EditableTreeCell();
+            return new JCETreeCell();
+        });
         root = new TextItem("App: " + AUtil.getCurrentPid());
         objects = new TextItem("Objects");
         classes = new TextItem("Loaded classes");

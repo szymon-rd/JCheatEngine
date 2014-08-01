@@ -25,12 +25,12 @@ public class MethodItem extends Item {
     }
 
     @Override
-    void handleClick() {
+    public void handleClick() {
 
     }
 
     @Override
-    void handleBranchExpansion() {
+    public void handleBranchExpansion() {
 
     }
 }

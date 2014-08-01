@@ -45,7 +45,7 @@
                                     </GridPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="593.0">
+                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="593.0" visible="false">
                                  <children>
                                     <GridPane layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
                                        <children>
@@ -55,7 +55,7 @@
                                           <TextField fx:id="fieldValue" layoutX="128.0" layoutY="112.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <TextField fx:id="fieldName" editable="false" layoutX="128.0" layoutY="38.0" GridPane.columnIndex="1" />
                                           <TextField fx:id="fieldType" editable="false" layoutX="128.0" layoutY="76.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <ChoiceBox fx:id="fieldValueChoice" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <ComboBox fx:id="fieldValueChoice" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

@@ -61,25 +61,11 @@ public class PackageItem extends Item {
     }
 
     @Override
-    void handleClick() {
-
-    }
-
-    @Override
-    void handleBranchExpansion() {
+    public void handleBranchExpansion() {
         loadClasses();
     }
 
     private static class EmptyItem extends Item {
-        @Override
-        public void handleClick() {
-
-        }
-
-        @Override
-        public void handleBranchExpansion() {
-
-        }
 
         @Override
         public String toString() {
