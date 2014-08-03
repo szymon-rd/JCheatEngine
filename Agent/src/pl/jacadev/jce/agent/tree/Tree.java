@@ -4,9 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import pl.jacadev.jce.agent.tree.cells.EditableTreeCell;
-import pl.jacadev.jce.agent.tree.cells.JCETreeCell;
-import pl.jacadev.jce.agent.tree.items.*;
+import pl.jacadev.jce.agent.tree.items.JCETreeCell;
+import pl.jacadev.jce.agent.tree.items.Item;
+import pl.jacadev.jce.agent.tree.items.ObjectItem;
+import pl.jacadev.jce.agent.tree.items.PackageItem;
+import pl.jacadev.jce.agent.tree.items.TextItem;
 import pl.jacadev.jce.agent.utils.AUtil;
 
 import java.lang.reflect.Field;
@@ -26,10 +28,7 @@ public class Tree {
 
     @SuppressWarnings("unchecked")
     public static void createTree(TreeView<Item> tree) {
-        tree.setCellFactory(itemTreeView -> {
-            if(itemTreeView.isEditable()) return new EditableTreeCell();
-            return new JCETreeCell();
-        });
+        tree.setCellFactory(itemTreeView -> new JCETreeCell());
         root = new TextItem("App: " + AUtil.getCurrentPid());
         objects = new TextItem("Objects");
         classes = new TextItem("Loaded classes");
@@ -79,7 +78,7 @@ public class Tree {
         itemList.addAll(Arrays.asList(getItems(field.getType())));
         return FXCollections.observableArrayList(itemList);
     }
-    private static ObjectItem[] getItems(Class<?> type){
+    public static ObjectItem[] getItems(Class<?> type){
         return objects.getChildren().stream()
                 .filter(a -> ((ObjectItem) a).getType().isAssignableFrom(type)).toArray(ObjectItem[]::new);
     }

@@ -23,14 +23,4 @@ public class MethodItem extends Item {
     public String toString() {
         return method.getName();
     }
-
-    @Override
-    public void handleClick() {
-
-    }
-
-    @Override
-    public void handleBranchExpansion() {
-
-    }
 }

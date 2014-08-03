@@ -1,7 +1,11 @@
 package pl.jacadev.jce.agent.tree.items;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.controlsfx.dialog.Dialogs;
+import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.res.Controller;
 
 import java.lang.reflect.Field;
@@ -29,22 +33,32 @@ public class ObjectItem extends Item {
 
     private void openFields() {
         for (Field f : object.getClass().getDeclaredFields()) {
-            if((f.getModifiers() & Modifier.STATIC) == 0)getChildren().add(new FieldItem(f, object));
+            if((f.getModifiers() & Modifier.STATIC) == 0) getChildren().add(new FieldItem(f, object));
         }
     }
 
     @Override
-    public boolean isEditable() {
-        return true;
+    void setupMenu(ContextMenu menu) {
+        MenuItem item = new MenuItem("Rename");
+        item.setOnAction(a -> rename());
+        menu.getItems().add(item);
     }
 
-    @Override
-    public void commitEdit(String name) {
-        this.name = name;
+    private void rename() {
+        Dialogs.create()
+                .owner(Agent.primaryStage)
+                .title("Rename")
+                .message("Please enter new name:")
+                .showTextInput(toString())
+                .ifPresent(name -> {
+                    this.setName(name);
+                    refresh();
+                });
     }
 
     public void setName(String name) {
         this.name = name;
+        setValue(this);
     }
 
     public String getName() {

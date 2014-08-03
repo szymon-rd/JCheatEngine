@@ -1,15 +1,25 @@
 package pl.jacadev.jce.agent.tree.items;
 
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import org.controlsfx.control.ButtonBar;
+import org.controlsfx.control.action.AbstractAction;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
+import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.res.Controller;
-import pl.jacadev.jce.agent.tree.cells.JCETreeCell;
+import pl.jacadev.jce.agent.tree.*;
+import pl.jacadev.jce.agent.utils.FieldValueSetter;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author JacaDev
@@ -33,11 +43,9 @@ public class ClassItem extends Item {
             this.image = image;
             this.constructable = constructable;
         }
-
     }
 
 
-    private ContextMenu menu;
     private final Class aClass;
     private boolean isLoaded = false;
     private final boolean constructable;
@@ -47,14 +55,6 @@ public class ClassItem extends Item {
         Type type = getType(aClass);
         this.constructable = type.constructable;
         setGraphic(new ImageView(type.image));
-        if(constructable){
-            menu = new ContextMenu();
-            MenuItem item = new MenuItem("New instance");
-            item.setOnAction(event -> {
-                //TODO create new instance
-            });
-            menu.getItems().add(item);
-        }
     }
 
     public Class getAClass() {
@@ -63,8 +63,7 @@ public class ClassItem extends Item {
 
     @Override
     public String toString() {
-        String className = aClass.getName();
-        return className.substring(className.lastIndexOf('.') + 1);
+        return aClass.getSimpleName();
     }
 
     @Override
@@ -74,6 +73,86 @@ public class ClassItem extends Item {
             openMethods();
             isLoaded = true;
         }
+    }
+
+    @Override
+    void setupMenu(ContextMenu menu) {
+        if (constructable) {
+            MenuItem item = new MenuItem("New instance");
+            item.setOnAction(a -> newInstance());
+            menu.getItems().add(item);
+        }
+    }
+
+    private void newInstance() {
+        if (constructable) {
+            Constructor[] constrs = aClass.getDeclaredConstructors();
+            ((constrs.length > 1) ?
+                    Dialogs.create()
+                            .owner(Agent.primaryStage)
+                            .title("New instance")
+                            .message("Select constructor:")
+                            .showChoices(Arrays.asList(constrs))
+                    : Optional.of(constrs[0]))
+                    .ifPresent(constructor -> {
+                        final Control[] parameterPools = new Control[constructor.getParameterCount()];
+
+                        Action actionNew = new AbstractAction("New") {
+                            public void handle(ActionEvent event) {
+                                Dialog d = (Dialog) event.getSource();
+                                Optional<String> name = Dialogs.create()
+                                        .owner(Agent.primaryStage)
+                                        .title("New instance")
+                                        .message("Insert name")
+                                        .showTextInput();
+                                name.ifPresent( a ->
+                                        createNew(a, TreeUtil.getValues(parameterPools, constructor.getParameterTypes()))
+                                );
+                                d.hide();
+                            }
+
+                            private void createNew(String name, Object[] parameters) {
+                                constructor.setAccessible(true);
+                                try {
+                                    ObjectItem instance = new ObjectItem(constructor.newInstance(parameters));
+                                } catch (ReflectiveOperationException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                        Dialog dlg = new Dialog(Agent.primaryStage, "New instance");
+                        GridPane grid = new GridPane();
+                        grid.setHgap(10);
+                        grid.setVgap(10);
+                        grid.setPadding(new Insets(0, 10, 0, 10));
+
+                        Parameter[] parameters = constructor.getParameters();
+                        for (int i = 0; i < parameters.length; i++) {
+                            Parameter parameter = parameters[i];
+                            grid.add(new Label(parameter.getName()), 0, i);
+                            Control parameterIn;
+                            if (FieldValueSetter.isParsable(parameter.getType())) {
+                                TextField parameterField = new TextField();
+                                parameterField.setPromptText(parameter.getType().getSimpleName());
+                                parameterIn = parameterField;
+                            } else {
+                                ComboBox<ObjectItem> combo = new ComboBox<>();
+                                combo.setPromptText(parameter.getType().getSimpleName());
+                                combo.setItems(FXCollections.observableArrayList(Tree.getItems(parameter.getType())));
+                                parameterIn = null;
+                            }
+                            grid.add(parameterIn, 1, i);
+                            parameterPools[i] = parameterIn;
+                        }
+
+                        ButtonBar.setType(actionNew, ButtonBar.ButtonType.OK_DONE);
+                        dlg.setMasthead("Create new instance of class " + toString());
+                        dlg.setContent(grid);
+                        dlg.getActions().addAll(actionNew, Dialog.Actions.CANCEL);
+                        dlg.show();
+                    });
+        } else throw new Error("Can not create new instance of this class");
     }
 
     private void openFields() {
@@ -94,10 +173,5 @@ public class ClassItem extends Item {
         if (aClass.isInterface()) return Type.INTERFACE;
         if ((aClass.getModifiers() & Modifier.ABSTRACT) != 0) return Type.ABSTRACT;
         return Type.CLASS;
-    }
-
-    @Override
-    public void updateCell(JCETreeCell cell) {
-        if(constructable) cell.setContextMenu(menu);
     }
 }

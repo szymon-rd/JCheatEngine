@@ -1,14 +1,15 @@
-package pl.jacadev.jce.agent.tree.cells;
+package pl.jacadev.jce.agent.tree.items;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.MouseEvent;
-import pl.jacadev.jce.agent.tree.items.Item;
 
 
 /**
  * @author JacaDev
  */
 public class JCETreeCell extends TreeCell<Item> {
+
     public JCETreeCell() {
         addEventHandler(MouseEvent.MOUSE_CLICKED, event -> getItem().handleClick());
     }
@@ -20,11 +21,15 @@ public class JCETreeCell extends TreeCell<Item> {
             setText(null);
             setGraphic(null);
         } else {
-            setText(getTreeItem().getValue().toString());
-            setGraphic(getTreeItem().getGraphic());
-            getItem().updateCell(this);
+            setText(getItem().toString());
+            setGraphic(getItem().getGraphic());
+            ContextMenu menu = new ContextMenu();
+            getItem().setupMenu(menu);
+            setContextMenu(menu);
         }
     }
+
+
 
 
 }

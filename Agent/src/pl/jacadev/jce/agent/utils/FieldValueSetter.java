@@ -41,17 +41,17 @@ public class FieldValueSetter {
         else throw new Error("field needs to be static");
     }
 
-    public static void setField(Object obj, Field field, String value) throws NoSuchFieldException {
+    public static void setField(Object owner, Field field, String value) throws NoSuchFieldException {
         if (isParsable(field.getType()))
-            setField(obj, field, parsers.get(field.getType()).apply(value));
+            setField(owner, field, parse(value, field.getType()));
         else throw new Error("field needs to be primitive or String");
     }
 
-    public static void setField(Object obj, Field field, Object value) throws NoSuchFieldException {
+    public static void setField(Object owner, Field field, Object value) throws NoSuchFieldException {
         field.setAccessible(true);
         if ((field.getModifiers() & Modifier.FINAL) != 0) makeSettable(field);
         try {
-            field.set(obj, value);
+            field.set(owner, value);
         } catch (IllegalAccessException e) {
             System.err.println("Exception! Name: " + field.getName() + " Modifiers: " + Modifier.toString(field.getModifiers()) + " Accessible: " + field.isAccessible());
             e.printStackTrace();
@@ -80,4 +80,13 @@ public class FieldValueSetter {
     public static boolean isParsable(Class type) {
         return parsers.containsKey(type);
     }
+
+    public static Object parse(String value, Class<?> type) {
+        return parsers.getOrDefault(type,
+                string -> {
+                    throw new Error("Unparsable type: " + type.getSimpleName());
+                }).apply(value);
+    }
+
+
 }

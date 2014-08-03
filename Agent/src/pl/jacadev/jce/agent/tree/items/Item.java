@@ -1,7 +1,7 @@
 package pl.jacadev.jce.agent.tree.items;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
-import pl.jacadev.jce.agent.tree.cells.JCETreeCell;
 
 /**
  * @author JacaDev
@@ -12,17 +12,16 @@ public abstract class Item extends TreeItem<Item> {
         addEventHandler(TreeItem.branchExpandedEvent(), objectTreeModificationEvent -> handleBranchExpansion());
         setValue(this);
     }
-
     public boolean isEditable(){
         return false;
     }
+    void refresh() {
+        boolean expanded = isExpanded();
+        setExpanded(!expanded);
+        setExpanded(expanded);
+    }
 
-    public void handleClick(){
-    }
-    public void handleBranchExpansion(){
-    }
-    public void updateCell(JCETreeCell cell) {
-    }
-    public void commitEdit(String text) {
-    }
+    void handleClick(){}
+    void handleBranchExpansion(){}
+    void setupMenu(ContextMenu menu){}
 }

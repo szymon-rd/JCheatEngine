@@ -33,7 +33,7 @@ public class Controller implements Initializable {
         ObservableList<TablePosition> selected = table.getSelectionModel().getSelectedCells();
         String pid = table.getItems().get(selected.get(0).getRow()).getPid();
         try {
-            JCEAttacher.attachTo(pid);
+            JCEAttacher.rAttachTo(pid);
         } catch (Exception e) {
             e.printStackTrace();
         }
