@@ -44,7 +44,7 @@ public class Tree {
     private static void createDefaultPackage() {
         TreeItem<Item> defaultPack = new PackageItem("<default>", true);
         defaultPack.getChildren().addAll(ApplicationMap.getClassesInDefaultPack());
-        classes.getChildren().add(defaultPack);
+        if(!defaultPack.getChildren().isEmpty()) classes.getChildren().add(defaultPack);
     }
 
     @SuppressWarnings("unchecked")

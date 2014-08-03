@@ -18,8 +18,9 @@ public class TreeUtil {
      * @return initiated classes excluding those from JCheatEngine
      */
     public static Class<?>[] getLoadedClasses() {
-        return Arrays.asList(Agent.INSTRUMENTATION.getInitiatedClasses(ClassLoader.getSystemClassLoader()))
-                .stream().filter(a -> isVisible(a.getName()) && !a.isArray()).toArray(Class[]::new);
+        return Arrays.stream(Agent.INSTRUMENTATION.getInitiatedClasses(ClassLoader.getSystemClassLoader()))
+                .filter(a -> isVisible(a.getName()) && !a.isArray())
+                .toArray(Class[]::new);
     }
 
     /**
