@@ -4,12 +4,16 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.res.Controller;
+import pl.jacadev.jce.agent.tree.Tree;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 /**
  * @author JacaDev
@@ -21,6 +25,7 @@ public class ObjectItem extends Item {
     private Object object;
 
     public ObjectItem(String name, Object object) {
+        Objects.requireNonNull(object);
         setGraphic(new ImageView(OBJECT_ICON));
         this.name = name;
         this.object = object;
@@ -32,6 +37,8 @@ public class ObjectItem extends Item {
     }
 
     private void openFields() {
+        System.out.println(object.getClass());
+        System.out.println(object.getClass().getDeclaredFields());
         for (Field f : object.getClass().getDeclaredFields()) {
             if((f.getModifiers() & Modifier.STATIC) == 0) getChildren().add(new FieldItem(f, object));
         }
@@ -39,21 +46,38 @@ public class ObjectItem extends Item {
 
     @Override
     void setupMenu(ContextMenu menu) {
-        MenuItem item = new MenuItem("Rename");
-        item.setOnAction(a -> rename());
-        menu.getItems().add(item);
+        MenuItem rename = new MenuItem("Rename");
+        rename.setOnAction(a -> rename());
+        MenuItem remove = new MenuItem("Remove");
+        remove.setOnAction(a ->{
+            Action response = Dialogs.create()
+                    .owner(Agent.primaryStage)
+                    .title("Remove")
+                    .masthead("Removing object " + toString())
+                    .message("Are you ok with this?")
+                    .actions(Dialog.Actions.YES, Dialog.Actions.NO)
+                    .showConfirm();
+            if(response == Dialog.Actions.YES){
+                remove();
+            }
+        });
+        menu.getItems().addAll(rename, remove);
     }
 
     private void rename() {
         Dialogs.create()
                 .owner(Agent.primaryStage)
                 .title("Rename")
-                .message("Please enter new name:")
+                .message("Enter new name: ")
                 .showTextInput(toString())
                 .ifPresent(name -> {
                     this.setName(name);
                     refresh();
                 });
+    }
+
+    private void remove(){
+        Tree.remove(this);
     }
 
     public void setName(String name) {

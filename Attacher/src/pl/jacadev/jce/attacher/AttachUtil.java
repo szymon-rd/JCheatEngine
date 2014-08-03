@@ -23,15 +23,15 @@ import java.util.List;
  */
 public class AttachUtil {
 
-
-
     public static void attachAgentToJVM(String pid, File agent) throws Exception {
         VirtualMachine vm = VirtualMachine.attach(pid);
         vm.loadAgent(agent.getAbsolutePath());
         vm.detach();
     }
 
-
+    /**
+     * @return bytes of stream
+     */
     public static byte[] getBytes(InputStream stream) {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
@@ -61,6 +61,9 @@ public class AttachUtil {
         unattachableVMsPids.remove(pid);
     }
 
+    /**
+     * @return running jvms excluding this and already attached ones.
+     */
     public static ObservableList<VM> getAttachableVMs() {
         ObservableList<VM> vms = FXCollections.observableArrayList();
         for (VirtualMachineDescriptor desc : VirtualMachine.list()) {
@@ -70,6 +73,9 @@ public class AttachUtil {
         return vms;
     }
 
+    /**
+     * @return pid of this jvm.
+     */
     public static String getCurrentPid() {
         String vm = ManagementFactory.getRuntimeMXBean().getName();
         return vm.substring(0, vm.indexOf('@'));

@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.util.Locale;
 
+/**
+ * @author JacaDev
+ */
 public class Agent extends Application {
     public static Instrumentation INSTRUMENTATION;
     public static Stage primaryStage;
@@ -31,7 +34,7 @@ public class Agent extends Application {
     }
 
     public static void killAgent() {
-        //INSTRUMENTATION.removeTransformer(transformer);
+        //Removing transformer (still TODO)
     }
 
     public static void main(String... args) {

@@ -14,25 +14,43 @@ import java.util.Optional;
  * @author JacaDev
  */
 public class TreeUtil {
+    /**
+     * @return initiated classes excluding those from JCheatEngine
+     */
     public static Class<?>[] getLoadedClasses() {
         return Arrays.asList(Agent.INSTRUMENTATION.getInitiatedClasses(ClassLoader.getSystemClassLoader()))
                 .stream().filter(a -> isVisible(a.getName()) && !a.isArray()).toArray(Class[]::new);
     }
 
+    /**
+     * @param path The path of class.
+     * @return true if class should be visible
+     */
     private static boolean isVisible(String path) {
         return !path.startsWith("pl.jacadev.jce") && !path.startsWith("javafx") && !path.startsWith("sun");
     }
 
-    public static boolean contains(TreeItem<?> item, Object obj) {
-        return item.getChildren().contains(obj);
+    /**
+     * @return true if treeItem contains object.
+     */
+    public static boolean contains(TreeItem<?> treeItem, Object obj) {
+        return treeItem.getChildren().contains(obj);
     }
 
+    /**
+     * @return the first element of tree equal to element.
+     */
     @SuppressWarnings("unchecked")
-    public static <T> Optional<TreeItem<?>> findEqual(TreeItem<?> item, T t) {
-        return (Optional<TreeItem<?>>) item.getChildren()
-                .stream().filter(t::equals).findFirst();
+    public static <T> Optional<TreeItem<?>> findEqual(TreeItem<?> tree, T element) {
+        return (Optional<TreeItem<?>>) tree.getChildren()
+                .stream().filter(element::equals).findFirst();
     }
 
+    /**
+     * @param controls Controls of type TreeItem or TextField.
+     * @param types Types for parsing values in controls.
+     * @return Parsed to types values of controls in array.
+     */
     public static Object[] getValues(Control[] controls, Class[] types) {
         Object[] values = new Object[controls.length];
         for (int i = 0; i < controls.length; i++) {
@@ -44,6 +62,7 @@ public class TreeUtil {
                 ComboBox comboBox = (ComboBox) control;
                 values[i] = comboBox.getValue();
             }
+            else throw new Error("Unsupported control type");
         }
         return values;
     }

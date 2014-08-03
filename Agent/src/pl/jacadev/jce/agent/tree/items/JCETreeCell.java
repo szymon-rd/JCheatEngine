@@ -11,7 +11,9 @@ import javafx.scene.input.MouseEvent;
 public class JCETreeCell extends TreeCell<Item> {
 
     public JCETreeCell() {
-        addEventHandler(MouseEvent.MOUSE_CLICKED, event -> getItem().handleClick());
+        addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(!isNull()) getItem().handleClick();
+        });
     }
 
     @Override
@@ -29,6 +31,9 @@ public class JCETreeCell extends TreeCell<Item> {
         }
     }
 
+    public boolean isNull(){
+        return getItem() == null;
+    }
 
 
 

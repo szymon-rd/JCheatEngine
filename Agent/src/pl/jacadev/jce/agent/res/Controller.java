@@ -1,5 +1,6 @@
 package pl.jacadev.jce.agent.res;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,11 +17,17 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * @author JacaDev
+ */
 public class Controller implements Initializable {
     public static Controller CONTROLLER;
 
     @FXML
-    private TreeView<Item> tree;
+    private TreeView<Item> classesTree;
+
+    @FXML
+    private TreeView<Item> objectsTree;
 
     /**
      * METHOD PANEL
@@ -58,6 +65,9 @@ public class Controller implements Initializable {
     private TextField fieldType;
 
     @FXML
+    private TextField fieldModifiers;
+
+    @FXML
     private Button setFieldBtn;
 
     @FXML
@@ -66,7 +76,7 @@ public class Controller implements Initializable {
     @FXML
     void handleSetField(ActionEvent event) {
         try {
-            if(isPrimitive(openedField)) FieldValueSetter.setField(openedObject, openedField, fieldValue.getText());
+            if (isPrimitive(openedField)) FieldValueSetter.setField(openedObject, openedField, fieldValue.getText());
             else FieldValueSetter.setField(openedObject, openedField, fieldValueChoice.getValue().getObject());
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,29 +114,40 @@ public class Controller implements Initializable {
         fieldPanel.setVisible(true);
         openedField = field;
         openedObject = obj;
+
         field.setAccessible(true);
         fieldName.setText(field.getName());
         fieldType.setText(openedField.getType().getName());
+        fieldModifiers.setText(Modifier.toString(field.getModifiers()));
 
         fieldValue.setText("");
         fieldValueChoice.getItems().clear();
         addFieldValueBtn.setDisable(true);
         setFieldBtn.setDisable(true);
+
+        fieldValue.setDisable(true);
+        fieldValueChoice.setDisable(true);
         if (isPrimitive(field)) {
             fieldValue.setVisible(true);
             fieldValueChoice.setVisible(false);
-            if (isStatic(field) || obj != null){
+            if (isStatic(field) || obj != null) {
+                fieldValue.setDisable(false);
                 fieldValue.setText(field.get(obj).toString());
                 setFieldBtn.setDisable(false);
             }
         } else {
             fieldValue.setVisible(false);
             fieldValueChoice.setVisible(true);
-            if (isStatic(field) || obj != null){
-                fieldValueChoice.setItems(Tree.getItems(field, obj));
-                fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));
-                addFieldValueBtn.setDisable(false);
-                setFieldBtn.setDisable(false);
+            if (isStatic(field) || obj != null) {
+                fieldValueChoice.setDisable(false);
+                ObservableList<ObjectItem> items = Tree.getItems(field, obj);
+                fieldValueChoice.setItems(items);
+                if(items.size() > 0){
+                    fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));
+                    setFieldBtn.setDisable(false);
+                }
+                if(field.get(obj) != null)
+                    addFieldValueBtn.setDisable(false);
             }
 
         }
@@ -149,7 +170,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CONTROLLER = this;
-        Tree.createTree(tree);
+        Tree.createTree(classesTree, objectsTree);
     }
 
 }

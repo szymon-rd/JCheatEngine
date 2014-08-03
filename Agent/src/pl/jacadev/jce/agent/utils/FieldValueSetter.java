@@ -49,7 +49,7 @@ public class FieldValueSetter {
 
     public static void setField(Object owner, Field field, Object value) throws NoSuchFieldException {
         field.setAccessible(true);
-        if ((field.getModifiers() & Modifier.FINAL) != 0) makeSettable(field);
+        if ((field.getModifiers() & Modifier.FINAL) != 0) accessFinal(field);
         try {
             field.set(owner, value);
         } catch (IllegalAccessException e) {
@@ -58,7 +58,7 @@ public class FieldValueSetter {
         }
     }
 
-    private static void makeSettable(Field field) {
+    private static void accessFinal(Field field) {
         try {
             Field f = Field.class.getDeclaredField("modifiers");
             f.setAccessible(true);

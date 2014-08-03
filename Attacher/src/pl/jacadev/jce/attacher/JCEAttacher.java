@@ -18,7 +18,7 @@ public class JCEAttacher {
         agent = toAssign;
     }
 
-    public static void rAttachTo(String pid){
+    public static void attachTo(String pid){
         Thread agentThread = new Thread(() -> {
             try {
                 AttachUtil.makeUnattachable(pid);

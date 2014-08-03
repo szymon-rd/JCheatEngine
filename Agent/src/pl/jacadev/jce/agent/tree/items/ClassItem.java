@@ -103,7 +103,7 @@ public class ClassItem extends Item {
                                 Optional<String> name = Dialogs.create()
                                         .owner(Agent.primaryStage)
                                         .title("New instance")
-                                        .message("Insert name")
+                                        .message("Enter name:")
                                         .showTextInput();
                                 name.ifPresent( a ->
                                         createNew(a, TreeUtil.getValues(parameterPools, constructor.getParameterTypes()))
@@ -114,7 +114,7 @@ public class ClassItem extends Item {
                             private void createNew(String name, Object[] parameters) {
                                 constructor.setAccessible(true);
                                 try {
-                                    ObjectItem instance = new ObjectItem(constructor.newInstance(parameters));
+                                    Tree.addObject(name, constructor.newInstance(parameters));
                                 } catch (ReflectiveOperationException e){
                                     e.printStackTrace();
                                 }

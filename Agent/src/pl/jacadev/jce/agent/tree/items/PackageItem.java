@@ -36,6 +36,9 @@ public class PackageItem extends Item {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
+    /**
+     * @return all PackageItems that contain this.
+     */
     public PackageItem[] path() {
         String[] packs = name.split("\\.");
         PackageItem[] path = new PackageItem[packs.length];

@@ -12,9 +12,10 @@ public abstract class Item extends TreeItem<Item> {
         addEventHandler(TreeItem.branchExpandedEvent(), objectTreeModificationEvent -> handleBranchExpansion());
         setValue(this);
     }
-    public boolean isEditable(){
-        return false;
-    }
+
+    /**
+     * The fastest way to refresh values without access to TreeCell.
+     */
     void refresh() {
         boolean expanded = isExpanded();
         setExpanded(!expanded);

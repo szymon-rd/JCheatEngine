@@ -15,6 +15,9 @@ import pl.jacadev.jce.attacher.VM;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * @author JacaDev
+ */
 public class Controller implements Initializable {
 
     public static Controller CONTROLLER;
@@ -33,7 +36,7 @@ public class Controller implements Initializable {
         ObservableList<TablePosition> selected = table.getSelectionModel().getSelectedCells();
         String pid = table.getItems().get(selected.get(0).getRow()).getPid();
         try {
-            JCEAttacher.rAttachTo(pid);
+            JCEAttacher.attachTo(pid);
         } catch (Exception e) {
             e.printStackTrace();
         }

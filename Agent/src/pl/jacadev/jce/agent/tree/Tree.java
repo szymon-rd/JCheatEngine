@@ -4,12 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import pl.jacadev.jce.agent.tree.items.JCETreeCell;
-import pl.jacadev.jce.agent.tree.items.Item;
-import pl.jacadev.jce.agent.tree.items.ObjectItem;
-import pl.jacadev.jce.agent.tree.items.PackageItem;
-import pl.jacadev.jce.agent.tree.items.TextItem;
-import pl.jacadev.jce.agent.utils.AUtil;
+import pl.jacadev.jce.agent.tree.items.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,19 +17,20 @@ import java.util.Optional;
  */
 public class Tree {
 
-    private static TreeItem<Item> root;
-    private static TreeItem<Item> objects;
-    private static TreeItem<Item> classes;
+    private static Item objects;
+    private static Item classes;
 
     @SuppressWarnings("unchecked")
-    public static void createTree(TreeView<Item> tree) {
-        tree.setCellFactory(itemTreeView -> new JCETreeCell());
-        root = new TextItem("App: " + AUtil.getCurrentPid());
-        objects = new TextItem("Objects");
-        classes = new TextItem("Loaded classes");
-        root.getChildren().addAll(objects, classes);
-        root.setExpanded(true);
-        tree.setRoot(root);
+    public static void createTree(TreeView<Item> classes, TreeView<Item> objects) {
+        classes.setCellFactory(itemTreeView -> new JCETreeCell());
+        objects.setCellFactory(itemTreeView -> new JCETreeCell());
+        Item classesRoot = new TextItem("Loaded classes");
+        classesRoot.setExpanded(true);
+        Item objectsRoot = new TextItem("Objects");
+        Tree.objects = objectsRoot;
+        Tree.classes = classesRoot;
+        classes.setRoot(classesRoot);
+        objects.setRoot(objectsRoot);
         loadPackages();
     }
 
@@ -74,7 +70,7 @@ public class Tree {
 
     public static ObservableList<ObjectItem> getItems(Field field, Object obj) throws ReflectiveOperationException {
         List<ObjectItem> itemList = new ArrayList<>();
-        itemList.add(new ObjectItem(field.get(obj)));
+        if(field.get(obj) != null) itemList.add(new ObjectItem(field.get(obj)));
         itemList.addAll(Arrays.asList(getItems(field.getType())));
         return FXCollections.observableArrayList(itemList);
     }
@@ -85,5 +81,11 @@ public class Tree {
 
     public static void addObject(Object object) {
         objects.getChildren().add(new ObjectItem(object));
+    }
+    public static void addObject(String name, Object object) {
+        objects.getChildren().add(new ObjectItem(name, object));
+    }
+    public static void remove(ObjectItem item){
+        objects.getChildren().remove(item);
     }
 }

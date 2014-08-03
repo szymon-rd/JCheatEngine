@@ -1,7 +1,6 @@
 package pl.jacadev.jce.agent.utils.mnemonics;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
 
 import java.util.function.Function;
 
@@ -9,6 +8,7 @@ import java.util.function.Function;
  * @author JacaDev
  */
 public class Mnemonics {
+    //TODO Everything
     @SuppressWarnings("unchecked")
     static Function<AbstractInsnNode, String> mnemonics[][] =
             new Function[][]{
@@ -215,19 +215,4 @@ public class Mnemonics {
                     new Function[]{a -> "goto_w"},       /* 200*/
                     new Function[]{a -> "jsr_w"},         /* 201*/
             };
-
-    public static String getMnemonics(InsnList instructions) {
-        StringBuilder builder = new StringBuilder();
-        for (AbstractInsnNode insn : instructions.toArray()) {
-            builder.append(getMnemonic(insn) + "\n");
-        }
-        return null;
-    }
-
-    public static String getMnemonic(AbstractInsnNode instruction) {
-        switch (instruction.getOpcode()) {
-        }
-        return null;
-    }
-
 }
