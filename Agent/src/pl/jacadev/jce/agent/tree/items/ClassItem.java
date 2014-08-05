@@ -166,7 +166,6 @@ public class ClassItem extends Item {
             getChildren().add(new MethodItem(m));
         }
     }
-
     private static Type getType(Class<?> aClass) {
         if (aClass.isAnnotation()) return Type.ANNOTATION;
         if (aClass.isEnum()) return Type.ENUM;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.SplitPane?>
@@ -10,12 +11,19 @@
    <children>
       <SplitPane dividerPositions="0.11666666666666667" orientation="VERTICAL" prefHeight="456.0" prefWidth="655.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: linear-gradient(#222222, #5a5a5a);" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: linear-gradient(#222222, #5a5a5a);" SplitPane.resizableWithParent="false">
+               <children>
+                  <ImageView fitHeight="93.0" fitWidth="93.0" layoutX="-6.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-17.0">
+                     <image>
+                        <Image url="@JCELogo.png" />
+                     </image>
+                  </ImageView>
+               </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
                   <SplitPane dividerPositions="0.23636363636363636" layoutY="11.0" prefHeight="342.0" prefWidth="653.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                            <children>
                               <Hyperlink layoutX="124.0" layoutY="440.0" onAction="#handleRefreshClasses" prefHeight="10.0" prefWidth="48.0" text="Refresh" AnchorPane.bottomAnchor="-3.0" AnchorPane.rightAnchor="-1.0" />
                               <TabPane layoutX="2.0" prefHeight="444.0" prefWidth="203.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -46,18 +54,18 @@
                            <children>
                               <AnchorPane fx:id="methodPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TextArea layoutX="14.0" layoutY="14.0" prefHeight="426.0" prefWidth="347.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                                    <Button layoutX="533.0" layoutY="428.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Save" AnchorPane.leftAnchor="533.0" AnchorPane.topAnchor="428.0" />
-                                    <GridPane layoutX="387.0" layoutY="25.0" AnchorPane.leftAnchor="387.0" AnchorPane.topAnchor="25.0">
+                                    <TextArea editable="false" layoutX="14.0" layoutY="14.0" prefHeight="426.0" prefWidth="347.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                                    <Button layoutX="517.0" layoutY="440.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Save" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                    <GridPane layoutX="387.0" layoutY="25.0" prefHeight="34.0" prefWidth="171.0" AnchorPane.leftAnchor="387.0" AnchorPane.topAnchor="25.0">
                                        <children>
-                                          <Label layoutX="387.0" layoutY="50.0" prefHeight="17.0" prefWidth="60.0" text="Access:" GridPane.rowIndex="1" />
-                                          <Label fx:id="methodAccess" layoutX="473.0" layoutY="67.0" prefHeight="17.0" prefWidth="68.0" text="\%access%" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label layoutX="387.0" layoutY="50.0" prefHeight="17.0" prefWidth="60.0" text="Modifiers:" GridPane.rowIndex="1" />
+                                          <Label fx:id="methodAccess" layoutX="473.0" layoutY="67.0" prefHeight="17.0" prefWidth="68.0" text="modifiers" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Label layoutX="387.0" layoutY="33.0" prefHeight="17.0" prefWidth="40.0" text="Name:" />
-                                          <Label fx:id="methodName" layoutX="491.0" layoutY="25.0" text="\\%name%" GridPane.columnIndex="1" />
+                                          <Label fx:id="methodName" layoutX="491.0" layoutY="25.0" text="name" GridPane.columnIndex="1" />
                                        </children>
                                        <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="45.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="86.0" minWidth="10.0" prefWidth="83.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="66.0" minWidth="10.0" prefWidth="53.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="86.0" minWidth="10.0" prefWidth="75.0" />
                                        </columnConstraints>
                                        <rowConstraints>
                                           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -66,7 +74,7 @@
                                     </GridPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <GridPane layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
                                        <children>
