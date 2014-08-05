@@ -20,9 +20,17 @@ public class Mnemonics {
     public String getMethodMnemonics(ClassNode classNode, String method){
         String[] classMnemonics = getClassMnemonics(classNode).split("\n");
         Pattern methodPattern = Pattern.compile('*' + method);
-        for(String mnemonic : classMnemonics){
-            if(methodPattern.matcher(mnemonic).matches()){
 
+        boolean isInsideMethod = false;
+        StringBuilder methodMnemonics = new StringBuilder();
+        for(String mnemonic : classMnemonics){
+            if(!isInsideMethod
+                    && methodPattern.matcher(mnemonic).matches()){
+                isInsideMethod = true;
+            }
+            if(isInsideMethod){
+
+                methodMnemonics.append(mnemonic);
             }
         }
         return null;
