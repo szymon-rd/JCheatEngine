@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="397.0" minWidth="527.0" prefHeight="397.0" prefWidth="529.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.jacadev.jce.attacher.res.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="376.0" minWidth="425.0" prefHeight="380.0" prefWidth="425.0" style="-fx-background-color: linear-gradient(#DEDEDE, #FFFFFF);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.jacadev.jce.attacher.res.Controller">
    <children>
-      <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="320.0" prefWidth="496.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="14.0">
+      <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="320.0" prefWidth="499.0" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="14.0">
         <columns>
           <TableColumn fx:id="pidColumn" editable="false" prefWidth="82.0" text="PID" />
-          <TableColumn fx:id="nameColumn" editable="false" minWidth="461.0" prefWidth="461.0" text="NAME" />
+          <TableColumn fx:id="nameColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="312.0" text="NAME" />
         </columns>
       </TableView>
-      <Button layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#handleAttachAction" prefHeight="25.0" prefWidth="66.0" text="Attach" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-      <Hyperlink layoutX="513.0" layoutY="15.0" onAction="#handleRefreshAction" text="R" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="15.0" />
+      <Button fx:id="attachBtn" layoutX="14.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleAttachAction" prefHeight="25.0" prefWidth="66.0" text="Attach" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="14.0" />
+      <Hyperlink layoutX="513.0" layoutY="14.0" onAction="#handleRefreshAction" text="R" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
+      <Button layoutX="400.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleUpdate" text="Check for updates" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="16.0" />
    </children>
 </AnchorPane>

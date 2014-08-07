@@ -15,6 +15,9 @@ import java.util.Locale;
  * @author JacaDev
  */
 public class Agent extends Application {
+
+    public static final String VERSION = "0.2";
+
     public static Instrumentation INSTRUMENTATION;
     public static Stage primaryStage;
     @Override

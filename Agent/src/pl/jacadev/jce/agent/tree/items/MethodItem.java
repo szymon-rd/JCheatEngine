@@ -20,6 +20,11 @@ public class MethodItem extends Item {
     }
 
     @Override
+    void handleClick() {
+        Controller.CONTROLLER.openMethodMenu(method, null);
+    }
+
+    @Override
     public String toString() {
         return method.getName();
     }

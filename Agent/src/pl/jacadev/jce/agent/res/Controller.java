@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebView;
+import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.tree.Tree;
 import pl.jacadev.jce.agent.tree.items.Item;
 import pl.jacadev.jce.agent.tree.items.ObjectItem;
@@ -23,6 +25,8 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     public static Controller CONTROLLER;
 
+    @FXML Label version;
+
     @FXML
     private TreeView<Item> classesTree;
 
@@ -37,7 +41,7 @@ public class Controller implements Initializable {
     private AnchorPane methodPanel;
 
     @FXML
-    private TextArea codeArea;
+    private WebView codeView;
 
     @FXML
     private Label methodName;
@@ -170,6 +174,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CONTROLLER = this;
+        version.setText("v " + Agent.VERSION);
         Tree.createTree(classesTree, objectsTree);
     }
 

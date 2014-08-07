@@ -4,9 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import pl.jacadev.jce.attacher.AttachUtil;
 import pl.jacadev.jce.attacher.JCEAttacher;
@@ -26,6 +24,10 @@ public class Controller implements Initializable {
     private TableColumn<VM, String> nameColumn;
 
     @FXML
+    private Button attachBtn;
+    Tooltip attachBtnTip;
+
+    @FXML
     private TableView<VM> table;
 
     @FXML
@@ -34,18 +36,25 @@ public class Controller implements Initializable {
     @FXML
     void handleAttachAction(ActionEvent event) {
         ObservableList<TablePosition> selected = table.getSelectionModel().getSelectedCells();
-        String pid = table.getItems().get(selected.get(0).getRow()).getPid();
-        try {
-            JCEAttacher.attachTo(pid);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!selected.isEmpty()) {
+            String pid = table.getItems().get(selected.get(0).getRow()).getPid();
+            try {
+                JCEAttacher.attachTo(pid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            handleRefreshAction(null);
         }
-        handleRefreshAction(null);
     }
 
     @FXML
     public void handleRefreshAction(ActionEvent event) {
         table.setItems(AttachUtil.getAttachableVMs());
+    }
+
+    @FXML
+    public void handleUpdate(ActionEvent event) {
+
     }
 
     @Override

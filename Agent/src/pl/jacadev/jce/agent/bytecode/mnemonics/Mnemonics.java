@@ -12,27 +12,29 @@ import java.util.regex.Pattern;
  */
 public class Mnemonics {
 
-    public String getClassMnemonics(ClassNode node){
+    public String getClassMnemonics(ClassNode node) {
         StringWriter stringWriter = new StringWriter();
         node.accept(new TraceClassVisitor(new PrintWriter(stringWriter)));
         return stringWriter.toString();
     }
-    public String getMethodMnemonics(ClassNode classNode, String method){
+
+    public String getMethodMnemonics(ClassNode classNode, String method) {
         String[] classMnemonics = getClassMnemonics(classNode).split("\n");
         Pattern methodPattern = Pattern.compile('*' + method);
 
         boolean isInsideMethod = false;
         StringBuilder methodMnemonics = new StringBuilder();
-        for(String mnemonic : classMnemonics){
-            if(!isInsideMethod
-                    && methodPattern.matcher(mnemonic).matches()){
+        for (String mnemonic : classMnemonics) {
+            if (!isInsideMethod
+                    && methodPattern.matcher(mnemonic).matches()) {
                 isInsideMethod = true;
             }
-            if(isInsideMethod){
-
+            if (isInsideMethod) {
+                if (mnemonic.length() > 0 && !Character.isUpperCase(mnemonic.charAt(0)))
+                    break;
                 methodMnemonics.append(mnemonic);
             }
         }
-        return null;
+        return methodMnemonics.toString();
     }
 }
