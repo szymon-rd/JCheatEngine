@@ -14,7 +14,7 @@ import java.security.ProtectionDomain;
  */
 public class MainTransformer implements ClassFileTransformer {
     public static final MainTransformer MAIN_TRANSFORMER = new MainTransformer();
-    private static final ClassFileTransformer DEFAULT_TRANSFORMER =
+    static final ClassFileTransformer DEFAULT_TRANSFORMER =
             (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> classfileBuffer;
 
     private MainTransformer() {
@@ -22,18 +22,23 @@ public class MainTransformer implements ClassFileTransformer {
 
     public static void redefineWith(ClassFileTransformer transformer, Class<?> aClass)
             throws UnmodifiableClassException, ClassNotFoundException {
-        MAIN_TRANSFORMER.transformer = transformer;
+        MAIN_TRANSFORMER.transformer.set(transformer);
         Agent.INSTRUMENTATION.redefineClasses(new ClassDefinition(aClass, AUtil.getBytesFromClass(aClass)));
     }
 
     public static void restoreToDefault() {
-        MAIN_TRANSFORMER.transformer = DEFAULT_TRANSFORMER;
+        MAIN_TRANSFORMER.transformer.set(DEFAULT_TRANSFORMER);
     }
 
-    private ClassFileTransformer transformer = DEFAULT_TRANSFORMER;
+    private final ThreadLocal<ClassFileTransformer> transformer = new ThreadLocal<ClassFileTransformer>() {
+        @Override
+        protected ClassFileTransformer initialValue() {
+            return DEFAULT_TRANSFORMER;
+        }
+    };
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        return transformer.transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
+        return transformer.get().transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
     }
 }
