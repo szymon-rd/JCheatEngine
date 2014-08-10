@@ -24,6 +24,7 @@ public class MethodBytecodeGetter implements ClassFileTransformer {
         ClassNode node = new ClassNode(Opcodes.ASM5);
         MainTransformer.redefineWith(BYTECODE_GETTER, m.getDeclaringClass());
         return new byte[0]; //TODO
+
     }
 
     @Override
