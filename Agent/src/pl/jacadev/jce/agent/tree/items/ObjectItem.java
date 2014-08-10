@@ -51,7 +51,7 @@ public class ObjectItem extends Item {
         MenuItem remove = new MenuItem("Remove");
         remove.setOnAction(a ->{
             Action response = Dialogs.create()
-                    .owner(Agent.primaryStage)
+                    .owner(Agent.MAIN_STAGE)
                     .title("Remove")
                     .masthead("Removing object " + toString())
                     .message("Are you ok with this?")
@@ -66,7 +66,7 @@ public class ObjectItem extends Item {
 
     private void rename() {
         Dialogs.create()
-                .owner(Agent.primaryStage)
+                .owner(Agent.MAIN_STAGE)
                 .title("Rename")
                 .message("Enter new name: ")
                 .showTextInput(toString())

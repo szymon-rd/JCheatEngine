@@ -16,12 +16,12 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: linear-gradient(#222222, #5a5a5a);" SplitPane.resizableWithParent="false">
                <children>
-                  <ImageView fitHeight="93.0" fitWidth="93.0" layoutX="-6.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-17.0">
+                  <ImageView fitHeight="93.0" fitWidth="93.0" layoutX="-6.0" layoutY="-16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-17.0" AnchorPane.leftAnchor="-6.0">
                      <image>
                         <Image url="@JCELogo.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="version" layoutX="59.0" layoutY="41.0" text="v X.X" textFill="#e4e2e2">
+                  <Label fx:id="version" layoutX="59.0" layoutY="41.0" text="v X.X" textFill="#e4e2e2" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="59.0">
                      <font>
                         <Font name="System Italic" size="10.0" />
                      </font>
@@ -60,13 +60,13 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <AnchorPane fx:id="methodPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <AnchorPane fx:id="methodPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button layoutX="517.0" layoutY="440.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="Save" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="14.0" />
                                     <GridPane layoutX="387.0" layoutY="25.0" prefHeight="34.0" prefWidth="171.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="25.0">
                                        <children>
                                           <Label layoutX="387.0" layoutY="50.0" prefHeight="17.0" prefWidth="60.0" text="Modifiers:" GridPane.rowIndex="1" />
-                                          <Label fx:id="methodAccess" layoutX="473.0" layoutY="67.0" prefHeight="17.0" prefWidth="68.0" text="modifiers" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label fx:id="methodModifiers" layoutX="473.0" layoutY="67.0" prefHeight="17.0" prefWidth="68.0" text="modifiers" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Label layoutX="387.0" layoutY="33.0" prefHeight="17.0" prefWidth="40.0" text="Name:" />
                                           <Label fx:id="methodName" layoutX="491.0" layoutY="25.0" text="name" GridPane.columnIndex="1" />
                                        </children>
@@ -79,7 +79,7 @@
                                           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                     </GridPane>
-                                    <WebView fx:id="codeView" layoutX="14.0" layoutY="14.0" prefHeight="446.0" prefWidth="338.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="233.0" AnchorPane.topAnchor="14.0" />
+                                    <TextArea fx:id="codeArea" layoutX="6.0" layoutY="5.0" prefHeight="462.0" prefWidth="367.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="212.0" AnchorPane.topAnchor="5.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane fx:id="fieldPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="585.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

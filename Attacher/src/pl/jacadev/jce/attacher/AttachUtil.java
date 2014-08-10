@@ -9,12 +9,15 @@ import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sun.tools.attach.HotSpotAttachProvider;
+import sun.tools.attach.WindowsAttachProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +69,23 @@ public class AttachUtil {
      */
     public static ObservableList<VM> getAttachableVMs() {
         ObservableList<VM> vms = FXCollections.observableArrayList();
-        for (VirtualMachineDescriptor desc : VirtualMachine.list()) {
+        for (VirtualMachineDescriptor desc : listVMs()) {
             if (!unattachableVMsPids.contains(desc.id()))
                 vms.add(new VM(desc.displayName().split(" ")[0], desc.id()));
         }
         return vms;
+    }
+
+    public static List<VirtualMachineDescriptor> listVMs(){
+        try {
+            WindowsAttachProvider provider = (WindowsAttachProvider) WindowsAttachProvider.providers().get(0);
+            Method getProcesses = WindowsAttachProvider.class.getDeclaredMethod("listJavaProcesses");
+            getProcesses.setAccessible(true);
+            return (List<VirtualMachineDescriptor>) getProcesses.invoke(provider);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

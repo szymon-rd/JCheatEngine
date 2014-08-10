@@ -24,12 +24,12 @@ public class ApplicationMap {
 
     public static ClassItem[] getClasses(PackageItem p) {
         return Arrays.stream(TreeUtil.getLoadedClasses())
-                .filter(a -> a.getName().substring(0, a.getName().lastIndexOf('.')).equals(p.getName()))
+                .filter(a -> a.getName().substring(0, (a.getName().contains(".")) ? a.getName().lastIndexOf('.') : 0).equals(p.getName()))
                 .map(ClassItem::new)
                 .toArray(ClassItem[]::new);
     }
 
-    public static ClassItem[] getClassesInDefaultPack(){
+    public static ClassItem[] getClassesInDefaultPackage(){
         return Arrays.stream(TreeUtil.getLoadedClasses())
                 .filter(a -> !a.getName().contains("."))
                 .map(ClassItem::new)

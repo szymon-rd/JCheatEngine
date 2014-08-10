@@ -89,7 +89,7 @@ public class ClassItem extends Item {
             Constructor[] constrs = aClass.getDeclaredConstructors();
             ((constrs.length > 1) ?
                     Dialogs.create()
-                            .owner(Agent.primaryStage)
+                            .owner(Agent.MAIN_STAGE)
                             .title("New instance")
                             .message("Select constructor:")
                             .showChoices(Arrays.asList(constrs))
@@ -101,7 +101,7 @@ public class ClassItem extends Item {
                             public void handle(ActionEvent event) {
                                 Dialog d = (Dialog) event.getSource();
                                 Optional<String> name = Dialogs.create()
-                                        .owner(Agent.primaryStage)
+                                        .owner(Agent.MAIN_STAGE)
                                         .title("New instance")
                                         .message("Enter name:")
                                         .showTextInput();
@@ -121,7 +121,7 @@ public class ClassItem extends Item {
                             }
                         };
 
-                        Dialog dlg = new Dialog(Agent.primaryStage, "New instance");
+                        Dialog dlg = new Dialog(Agent.MAIN_STAGE, "New instance");
                         GridPane grid = new GridPane();
                         grid.setHgap(10);
                         grid.setVgap(10);

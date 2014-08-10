@@ -1,5 +1,6 @@
 package pl.jacadev.jce.agent.bytecode.transformations;
 
+import jdk.internal.org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -22,11 +23,11 @@ public class MethodBytecodeGetter implements ClassFileTransformer {
         ClassReader reader = new ClassReader(AUtil.getBytesFromClass(m.getDeclaringClass()));
         ClassNode node = new ClassNode(Opcodes.ASM5);
         MainTransformer.redefineWith(BYTECODE_GETTER, m.getDeclaringClass());
+        return new byte[0]; //TODO
     }
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-
-        return new byte[0];
+        return classfileBuffer;
     }
 }

@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.web.WebView;
 import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.tree.Tree;
 import pl.jacadev.jce.agent.tree.items.Item;
@@ -17,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -41,13 +41,13 @@ public class Controller implements Initializable {
     private AnchorPane methodPanel;
 
     @FXML
-    private WebView codeView;
+    private TextArea codeArea;
 
     @FXML
     private Label methodName;
 
     @FXML
-    private Label methodAccess;
+    private Label methodModifiers;
 
     /**
      * FIELD PANEL
@@ -114,6 +114,7 @@ public class Controller implements Initializable {
     private Object openedObject;
 
     public void openField(Field field, Object obj) throws ReflectiveOperationException {
+        Objects.nonNull(field);
         methodPanel.setVisible(false);
         fieldPanel.setVisible(true);
         openedField = field;
@@ -166,9 +167,14 @@ public class Controller implements Initializable {
         return FieldValueSetter.isParsable(field.getType());
     }
 
+    private Method openedMethod;
     public void openMethodMenu(Method method, byte[] bytecode) {
+        Objects.nonNull(method);
         fieldPanel.setVisible(false);
         methodPanel.setVisible(true);
+
+        methodName.setText(method.getName());
+        methodModifiers.setText(Modifier.toString(method.getModifiers()));
     }
 
     @Override
