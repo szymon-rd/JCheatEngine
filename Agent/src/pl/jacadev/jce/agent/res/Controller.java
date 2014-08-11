@@ -25,7 +25,8 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     public static Controller CONTROLLER;
 
-    @FXML Label version;
+    @FXML
+    Label version;
 
     @FXML
     private TreeView<Item> classesTree;
@@ -132,30 +133,30 @@ public class Controller implements Initializable {
 
         fieldValue.setDisable(true);
         fieldValueChoice.setDisable(true);
-        if (isPrimitive(field)) {
-            fieldValue.setVisible(true);
-            fieldValueChoice.setVisible(false);
-            if (isStatic(field) || obj != null) {
-                fieldValue.setDisable(false);
-                fieldValue.setText(field.get(obj).toString());
+
+        boolean isPrimitive = isPrimitive(field);
+        boolean isStatic = isStatic(field);
+        boolean isObjNull = obj == null;
+
+        fieldValue.setVisible(isPrimitive);
+        fieldValueChoice.setVisible(!isPrimitive);
+        if (isPrimitive && (isStatic || isObjNull)) {
+            fieldValue.setDisable(false);
+            fieldValue.setText(field.get(obj).toString());
+            setFieldBtn.setDisable(false);
+        }
+        if (!isPrimitive && (isStatic || isObjNull)) {
+            fieldValueChoice.setDisable(false);
+            ObservableList<ObjectItem> items = Tree.getItems(field, obj);
+            fieldValueChoice.setItems(items);
+            if (items.size() > 0) {
+                fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));
                 setFieldBtn.setDisable(false);
             }
-        } else {
-            fieldValue.setVisible(false);
-            fieldValueChoice.setVisible(true);
-            if (isStatic(field) || obj != null) {
-                fieldValueChoice.setDisable(false);
-                ObservableList<ObjectItem> items = Tree.getItems(field, obj);
-                fieldValueChoice.setItems(items);
-                if(items.size() > 0){
-                    fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));
-                    setFieldBtn.setDisable(false);
-                }
-                if(field.get(obj) != null)
-                    addFieldValueBtn.setDisable(false);
-            }
-
+            if (field.get(obj) != null)
+                addFieldValueBtn.setDisable(false);
         }
+
 
     }
 
@@ -168,6 +169,7 @@ public class Controller implements Initializable {
     }
 
     private Method openedMethod;
+
     public void openMethodMenu(Method method, byte[] bytecode) {
         Objects.nonNull(method);
         fieldPanel.setVisible(false);

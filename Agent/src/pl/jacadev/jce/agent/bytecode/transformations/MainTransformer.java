@@ -17,9 +17,6 @@ public class MainTransformer implements ClassFileTransformer {
     static final ClassFileTransformer DEFAULT_TRANSFORMER =
             (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> classfileBuffer;
 
-    private MainTransformer() {
-    }
-
     public static void redefineWith(ClassFileTransformer transformer, Class<?> aClass)
             throws UnmodifiableClassException, ClassNotFoundException {
         MAIN_TRANSFORMER.transformer.set(transformer);
@@ -40,5 +37,8 @@ public class MainTransformer implements ClassFileTransformer {
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         return transformer.get().transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
+    }
+
+    private MainTransformer() {
     }
 }

@@ -1,6 +1,5 @@
 package pl.jacadev.jce.agent.bytecode.transformations;
 
-import jdk.internal.org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -15,20 +14,20 @@ import java.security.ProtectionDomain;
 /**
  * @author JacaDev
  */
-public class MethodBytecodeGetter implements ClassFileTransformer {
-    static final MethodBytecodeGetter BYTECODE_GETTER = new MethodBytecodeGetter();
-    private final ThreadLocal<byte[]> classBytes = new ThreadLocal<>();
+public class ClassBytecodeGetter implements ClassFileTransformer {
+    static final ClassBytecodeGetter BYTECODE_GETTER = new ClassBytecodeGetter();
+    private ClassBytecodeGetter(){}
 
-    public static byte[] getBytes(Method m) throws UnmodifiableClassException, ClassNotFoundException {
-        ClassReader reader = new ClassReader(AUtil.getBytesFromClass(m.getDeclaringClass()));
-        ClassNode node = new ClassNode(Opcodes.ASM5);
-        MainTransformer.redefineWith(BYTECODE_GETTER, m.getDeclaringClass());
-        return new byte[0]; //TODO
-
+    private static final ThreadLocal<byte[]> classBytes = new ThreadLocal<>();
+    public static byte[] getBytes(Class aClass) throws UnmodifiableClassException, ClassNotFoundException {
+        MainTransformer.redefineWith(BYTECODE_GETTER, aClass);
+        return classBytes.get();
     }
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+        classBytes.set(classfileBuffer);
         return classfileBuffer;
     }
+
 }
