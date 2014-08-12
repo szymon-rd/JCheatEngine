@@ -18,14 +18,14 @@ public class TreeUtil {
      * @return initiated classes excluding those from JCheatEngine
      */
     public static Class<?>[] getLoadedClasses() {
-        return Arrays.stream(Agent.INSTRUMENTATION.getInitiatedClasses(ClassLoader.getSystemClassLoader()))
+        return Arrays.stream(Agent.INSTRUMENTATION.getAllLoadedClasses())
                 .filter(a -> isVisible(a.getName()) && !a.isArray())
                 .toArray(Class[]::new);
     }
 
     /**
      * @param path The path of class.
-     * @return true if class should be visible
+     * @return true if class should be visible for user.
      */
     private static boolean isVisible(String path) {
         return !path.startsWith("pl.jacadev.jce") && !path.startsWith("javafx") && !path.startsWith("sun");
@@ -48,9 +48,7 @@ public class TreeUtil {
     }
 
     /**
-     * @param controls Controls of type TreeItem or TextField.
-     * @param types Types for parsing values in controls.
-     * @return Parsed to types values of controls in array.
+     * @return values of controls
      */
     public static Object[] getValues(Control[] controls, Class[] types) {
         Object[] values = new Object[controls.length];
@@ -63,7 +61,7 @@ public class TreeUtil {
                 ComboBox comboBox = (ComboBox) control;
                 values[i] = comboBox.getValue();
             }
-            else throw new Error("Unsupported control type");
+            else throw new UnsupportedOperationException("Unsupported control type");
         }
         return values;
     }

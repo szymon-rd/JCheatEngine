@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,21 +10,21 @@ import java.lang.reflect.Modifier;
 /**
  * @author JacaDev
  */
-public class FieldItem extends Item {
+public class FieldNode extends Node {
     private static final Image FIELD_ICON = new Image(Controller.class.getResourceAsStream("icons/fieldIcon.png"));
     private static final Image U_FIELD_ICON = new Image(Controller.class.getResourceAsStream("icons/unmodifiableFieldIcon.png"));
 
     private final Field field;
     private final Object owner;
 
-    public FieldItem(Field field, Object owner) {
+    public FieldNode(Field field, Object owner) {
         this.field = field;
         this.owner = owner;
         if(isModifiable()) setGraphic(new ImageView(FIELD_ICON));
         else setGraphic(new ImageView(U_FIELD_ICON));
     }
 
-    public FieldItem(Field field) {
+    public FieldNode(Field field) {
         this(field, null);
     }
 

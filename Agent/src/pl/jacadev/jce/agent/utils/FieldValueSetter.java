@@ -44,7 +44,7 @@ public class FieldValueSetter {
     public static void setField(Object owner, Field field, String value) throws NoSuchFieldException {
         if (isParsable(field.getType()))
             setField(owner, field, parse(value, field.getType()));
-        else throw new Error("field needs to be primitive or String");
+        else throw new UnsupportedOperationException("field needs to be primitive or String");
     }
 
     public static void setField(Object owner, Field field, Object value) throws NoSuchFieldException {
@@ -63,7 +63,6 @@ public class FieldValueSetter {
             Field f = Field.class.getDeclaredField("modifiers");
             f.setAccessible(true);
             f.set(field, field.getModifiers() & ~Modifier.FINAL);
-
             Method getacc = Field.class.getDeclaredMethod("getFieldAccessor", Object.class);
             getacc.setAccessible(true);
             FieldAccessor accessor = (FieldAccessor) getacc.invoke(field, field);

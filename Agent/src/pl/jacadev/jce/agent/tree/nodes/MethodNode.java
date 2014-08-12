@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,12 +9,12 @@ import java.lang.reflect.Method;
 /**
  * @author JacaDev
  */
-public class MethodItem extends Item {
+public class MethodNode extends Node {
     private static final Image METHOD_ICON = new Image(Controller.class.getResourceAsStream("icons/methodIcon.png"));
 
     private Method method;
 
-    public MethodItem(Method method){
+    public MethodNode(Method method){
         setGraphic(new ImageView(METHOD_ICON));
         this.method = method;
     }

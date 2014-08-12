@@ -10,7 +10,7 @@ import java.lang.management.ManagementFactory;
  */
 public class AUtil {
     /**
-     * @return pid of this jvm.
+     * @return pid of current jvm.
      */
     public static String getCurrentPid() {
         String vm = ManagementFactory.getRuntimeMXBean().getName();

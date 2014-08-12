@@ -1,7 +1,7 @@
 package pl.jacadev.jce.agent.tree;
 
-import pl.jacadev.jce.agent.tree.items.ClassItem;
-import pl.jacadev.jce.agent.tree.items.PackageItem;
+import pl.jacadev.jce.agent.tree.nodes.ClassNode;
+import pl.jacadev.jce.agent.tree.nodes.PackageNode;
 
 import java.util.Arrays;
 
@@ -22,17 +22,17 @@ public class ApplicationMap {
                 .toArray(String[]::new);
     }
 
-    public static ClassItem[] getClasses(PackageItem p) {
+    public static ClassNode[] getClasses(PackageNode p) {
         return Arrays.stream(TreeUtil.getLoadedClasses())
                 .filter(a -> a.getName().substring(0, (a.getName().contains(".")) ? a.getName().lastIndexOf('.') : 0).equals(p.getName()))
-                .map(ClassItem::new)
-                .toArray(ClassItem[]::new);
+                .map(ClassNode::new)
+                .toArray(ClassNode[]::new);
     }
 
-    public static ClassItem[] getClassesInDefaultPackage(){
+    public static ClassNode[] getClassesInDefaultPackage(){
         return Arrays.stream(TreeUtil.getLoadedClasses())
                 .filter(a -> !a.getName().contains("."))
-                .map(ClassItem::new)
-                .toArray(ClassItem[]::new);
+                .map(ClassNode::new)
+                .toArray(ClassNode[]::new);
     }
 }

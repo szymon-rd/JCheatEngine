@@ -8,8 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.tree.Tree;
-import pl.jacadev.jce.agent.tree.items.Item;
-import pl.jacadev.jce.agent.tree.items.ObjectItem;
+import pl.jacadev.jce.agent.tree.nodes.Node;
+import pl.jacadev.jce.agent.tree.nodes.ObjectNode;
 import pl.jacadev.jce.agent.utils.FieldValueSetter;
 
 import java.lang.reflect.Field;
@@ -29,10 +29,10 @@ public class Controller implements Initializable {
     Label version;
 
     @FXML
-    private TreeView<Item> classesTree;
+    private TreeView<Node> classesTree;
 
     @FXML
-    private TreeView<Item> objectsTree;
+    private TreeView<Node> objectsTree;
 
     /**
      * METHOD PANEL
@@ -64,7 +64,7 @@ public class Controller implements Initializable {
     private TextField fieldValue;
 
     @FXML
-    private ComboBox<ObjectItem> fieldValueChoice;
+    private ComboBox<ObjectNode> fieldValueChoice;
 
     @FXML
     private TextField fieldType;
@@ -140,14 +140,14 @@ public class Controller implements Initializable {
 
         fieldValue.setVisible(isPrimitive);
         fieldValueChoice.setVisible(!isPrimitive);
-        if (isPrimitive && (isStatic || isObjNull)) {
+        if (isPrimitive && (isStatic || !isObjNull)) {
             fieldValue.setDisable(false);
             fieldValue.setText(field.get(obj).toString());
             setFieldBtn.setDisable(false);
         }
-        if (!isPrimitive && (isStatic || isObjNull)) {
+        if (!isPrimitive && (isStatic || !isObjNull)) {
             fieldValueChoice.setDisable(false);
-            ObservableList<ObjectItem> items = Tree.getItems(field, obj);
+            ObservableList<ObjectNode> items = Tree.getItems(field, obj);
             fieldValueChoice.setItems(items);
             if (items.size() > 0) {
                 fieldValueChoice.setValue(fieldValueChoice.getItems().get(0));

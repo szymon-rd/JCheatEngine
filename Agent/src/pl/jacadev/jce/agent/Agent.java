@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialogs;
 import pl.jacadev.jce.agent.bytecode.transformations.MainTransformer;
 
 import java.io.IOException;
@@ -18,12 +19,13 @@ import java.util.Locale;
 public class Agent extends Application {
 
     public static final String VERSION = "0.2";
+    public static final ClassLoader SYSTEM_CLASS_LOADER = ClassLoader.getSystemClassLoader();
 
     public static Instrumentation INSTRUMENTATION;
-    public static Stage MAIN_STAGE;
+    public static Stage STAGE;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Agent.MAIN_STAGE = primaryStage;
+        STAGE = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("res/agent.fxml"));
         primaryStage.setTitle("JCheatEngine");
         primaryStage.setScene(new Scene(root));
@@ -40,6 +42,14 @@ public class Agent extends Application {
 
     public static void killAgent() {
         INSTRUMENTATION.removeTransformer(MainTransformer.MAIN_TRANSFORMER);
+    }
+
+    public static void showError(String message){ //TODO implement
+        Dialogs.create()
+                .owner(STAGE)
+                .title("Error")
+                .message(message)
+                .showError();
     }
 
     public static void main(String... args) {

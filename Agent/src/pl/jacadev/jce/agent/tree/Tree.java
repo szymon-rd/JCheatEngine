@@ -4,7 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import pl.jacadev.jce.agent.tree.items.*;
+import pl.jacadev.jce.agent.tree.nodes.Node;
+import pl.jacadev.jce.agent.tree.nodes.ObjectNode;
+import pl.jacadev.jce.agent.tree.nodes.PackageNode;
+import pl.jacadev.jce.agent.tree.nodes.TextNode;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,16 +20,16 @@ import java.util.Optional;
  */
 public class Tree {
 
-    private static Item objects;
-    private static Item classes;
+    private static Node objects;
+    private static Node classes;
 
     @SuppressWarnings("unchecked")
-    public static void createTree(TreeView<Item> classes, TreeView<Item> objects) {
-        classes.setCellFactory(itemTreeView -> new JCETreeCell());
-        objects.setCellFactory(itemTreeView -> new JCETreeCell());
-        Item classesRoot = new TextItem("Loaded classes");
+    public static void createTree(TreeView<Node> classes, TreeView<Node> objects) {
+        classes.setCellFactory(itemTreeView -> new pl.jacadev.jce.agent.tree.nodes.JCETreeCell());
+        objects.setCellFactory(itemTreeView -> new pl.jacadev.jce.agent.tree.nodes.JCETreeCell());
+        Node classesRoot = new TextNode("Loaded classes");
         classesRoot.setExpanded(true);
-        Item objectsRoot = new TextItem("Objects");
+        Node objectsRoot = new TextNode("Objects");
         Tree.objects = objectsRoot;
         Tree.classes = classesRoot;
         classes.setRoot(classesRoot);
@@ -42,17 +45,17 @@ public class Tree {
     }
 
     private static void createDefaultPackage() {
-        TreeItem<Item> defaultPack = new PackageItem("<default>", true);
+        TreeItem<Node> defaultPack = new PackageNode("<default>", true);
         defaultPack.getChildren().addAll(ApplicationMap.getClassesInDefaultPackage());
         if(!defaultPack.getChildren().isEmpty()) classes.getChildren().add(defaultPack);
     }
 
     @SuppressWarnings("unchecked")
     private static TreeItem putPackage(String path) {
-        PackageItem[] packages = new PackageItem(path).path();
+        PackageNode[] packages = new PackageNode(path).path();
         TreeItem node = classes;
         for (int i = 0; i < packages.length; i++) {
-            PackageItem pack = packages[i];
+            PackageNode pack = packages[i];
             Optional<TreeItem<?>> packNode = TreeUtil.findEqual(node, pack);
             if (packNode.isPresent()) node = packNode.get();
             else {
@@ -68,24 +71,24 @@ public class Tree {
         loadPackages();
     }
 
-    public static ObservableList<ObjectItem> getItems(Field field, Object obj) throws ReflectiveOperationException {
-        List<ObjectItem> itemList = new ArrayList<>();
-        if(field.get(obj) != null) itemList.add(new ObjectItem(field.get(obj)));
+    public static ObservableList<ObjectNode> getItems(Field field, Object obj) throws ReflectiveOperationException {
+        List<ObjectNode> itemList = new ArrayList<>();
+        if(field.get(obj) != null) itemList.add(new ObjectNode(field.get(obj)));
         itemList.addAll(Arrays.asList(getItems(field.getType())));
         return FXCollections.observableArrayList(itemList);
     }
-    public static ObjectItem[] getItems(Class<?> type){
+    public static ObjectNode[] getItems(Class<?> type){
         return objects.getChildren().stream()
-                .filter(a -> ((ObjectItem) a).getType().isAssignableFrom(type)).toArray(ObjectItem[]::new);
+                .filter(a -> ((ObjectNode) a).getType().isAssignableFrom(type)).toArray(ObjectNode[]::new);
     }
 
     public static void addObject(Object object) {
-        objects.getChildren().add(new ObjectItem(object));
+        objects.getChildren().add(new ObjectNode(object));
     }
     public static void addObject(String name, Object object) {
-        objects.getChildren().add(new ObjectItem(name, object));
+        objects.getChildren().add(new ObjectNode(name, object));
     }
-    public static void remove(ObjectItem item){
+    public static void remove(ObjectNode item){
         objects.getChildren().remove(item);
     }
 }

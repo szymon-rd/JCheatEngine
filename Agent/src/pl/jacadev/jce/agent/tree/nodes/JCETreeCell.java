@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeCell;
@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * @author JacaDev
  */
-public class JCETreeCell extends TreeCell<Item> {
+public class JCETreeCell extends TreeCell<Node> {
 
     public JCETreeCell() {
         addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -17,8 +17,8 @@ public class JCETreeCell extends TreeCell<Item> {
     }
 
     @Override
-    protected void updateItem(Item item, boolean empty) {
-        super.updateItem(item, empty);
+    protected void updateItem(Node node, boolean empty) {
+        super.updateItem(node, empty);
         if (empty) {
             setText(null);
             setGraphic(null);

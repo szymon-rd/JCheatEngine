@@ -1,12 +1,12 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 /**
  * @author JacaDev
  */
-public class TextItem extends Item {
+public class TextNode extends Node {
     private String text;
 
-    public TextItem(String text) {
+    public TextNode(String text) {
         this.text = text;
     }
 

@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -17,6 +17,7 @@ import pl.jacadev.jce.agent.res.Controller;
 import pl.jacadev.jce.agent.tree.*;
 import pl.jacadev.jce.agent.utils.FieldValueSetter;
 
+import javax.swing.tree.TreeNode;
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import java.util.Optional;
 /**
  * @author JacaDev
  */
-public class ClassItem extends Item {
+public class ClassNode extends Node {
 
     private static final Image CLASS_ICON = new Image(Controller.class.getResourceAsStream("icons/classIcon.png"));
     private static final Image ENUM_ICON = new Image(Controller.class.getResourceAsStream("icons/enumIcon.png"));
@@ -50,7 +51,7 @@ public class ClassItem extends Item {
     private boolean isLoaded = false;
     private final boolean constructable;
 
-    public ClassItem(Class aClass) {
+    public ClassNode(Class aClass) {
         this.aClass = aClass;
         Type type = getType(aClass);
         this.constructable = type.constructable;
@@ -89,7 +90,7 @@ public class ClassItem extends Item {
             Constructor[] constrs = aClass.getDeclaredConstructors();
             ((constrs.length > 1) ?
                     Dialogs.create()
-                            .owner(Agent.MAIN_STAGE)
+                            .owner(Agent.STAGE)
                             .title("New instance")
                             .message("Select constructor:")
                             .showChoices(Arrays.asList(constrs))
@@ -101,7 +102,7 @@ public class ClassItem extends Item {
                             public void handle(ActionEvent event) {
                                 Dialog d = (Dialog) event.getSource();
                                 Optional<String> name = Dialogs.create()
-                                        .owner(Agent.MAIN_STAGE)
+                                        .owner(Agent.STAGE)
                                         .title("New instance")
                                         .message("Enter name:")
                                         .showTextInput();
@@ -121,7 +122,7 @@ public class ClassItem extends Item {
                             }
                         };
 
-                        Dialog dlg = new Dialog(Agent.MAIN_STAGE, "New instance");
+                        Dialog dlg = new Dialog(Agent.STAGE, "New instance");
                         GridPane grid = new GridPane();
                         grid.setHgap(10);
                         grid.setVgap(10);
@@ -137,7 +138,7 @@ public class ClassItem extends Item {
                                 parameterField.setPromptText(parameter.getType().getSimpleName());
                                 parameterIn = parameterField;
                             } else {
-                                ComboBox<ObjectItem> combo = new ComboBox<>();
+                                ComboBox<ObjectNode> combo = new ComboBox<>();
                                 combo.setPromptText(parameter.getType().getSimpleName());
                                 combo.setItems(FXCollections.observableArrayList(Tree.getItems(parameter.getType())));
                                 parameterIn = null;
@@ -157,13 +158,13 @@ public class ClassItem extends Item {
 
     private void openFields() {
         for (Field f : aClass.getDeclaredFields()) {
-            getChildren().add(new FieldItem(f));
+            getChildren().add(new FieldNode(f));
         }
     }
 
     private void openMethods() {
         for (Method m : aClass.getDeclaredMethods()) {
-            getChildren().add(new MethodItem(m));
+            getChildren().add(new MethodNode(m));
         }
     }
     private static Type getType(Class<?> aClass) {

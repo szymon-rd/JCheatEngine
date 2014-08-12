@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -18,13 +18,13 @@ import java.util.Objects;
 /**
  * @author JacaDev
  */
-public class ObjectItem extends Item {
+public class ObjectNode extends Node {
     private static final Image OBJECT_ICON = new Image(Controller.class.getResourceAsStream("icons/objectIcon.png"));
 
     private String name;
     private Object object;
 
-    public ObjectItem(String name, Object object) {
+    public ObjectNode(String name, Object object) {
         Objects.requireNonNull(object);
         setGraphic(new ImageView(OBJECT_ICON));
         this.name = name;
@@ -32,7 +32,7 @@ public class ObjectItem extends Item {
         openFields();
     }
 
-    public ObjectItem(Object object) {
+    public ObjectNode(Object object) {
         this(null, object);
     }
 
@@ -40,7 +40,7 @@ public class ObjectItem extends Item {
         System.out.println(object.getClass());
         System.out.println(object.getClass().getDeclaredFields());
         for (Field f : object.getClass().getDeclaredFields()) {
-            if((f.getModifiers() & Modifier.STATIC) == 0) getChildren().add(new FieldItem(f, object));
+            if((f.getModifiers() & Modifier.STATIC) == 0) getChildren().add(new FieldNode(f, object));
         }
     }
 
@@ -51,7 +51,7 @@ public class ObjectItem extends Item {
         MenuItem remove = new MenuItem("Remove");
         remove.setOnAction(a ->{
             Action response = Dialogs.create()
-                    .owner(Agent.MAIN_STAGE)
+                    .owner(Agent.STAGE)
                     .title("Remove")
                     .masthead("Removing object " + toString())
                     .message("Are you ok with this?")
@@ -66,7 +66,7 @@ public class ObjectItem extends Item {
 
     private void rename() {
         Dialogs.create()
-                .owner(Agent.MAIN_STAGE)
+                .owner(Agent.STAGE)
                 .title("Rename")
                 .message("Enter new name: ")
                 .showTextInput(toString())

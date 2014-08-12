@@ -15,6 +15,7 @@ public class ClassBytecodeSetter implements ClassFileTransformer {
     public static void setBytes(Class aClass) throws UnmodifiableClassException, ClassNotFoundException {
         MainTransformer.redefineWith(BYTECODE_SETTER, aClass);
     }
+
     private static final ThreadLocal<byte[]> toSet = new ThreadLocal<>();
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {

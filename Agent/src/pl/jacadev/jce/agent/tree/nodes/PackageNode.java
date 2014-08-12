@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,19 +8,19 @@ import pl.jacadev.jce.agent.tree.ApplicationMap;
 /**
  * @author JacaDev
  */
-public class PackageItem extends Item {
+public class PackageNode extends Node {
     private static final Image PACK_ICON = new Image(Controller.class.getResourceAsStream("icons/packIcon.png"));
-    private final EmptyItem emptyItem = new EmptyItem();
+    private final EmptyNode emptyItem = new EmptyNode();
     private final String name;
     private boolean areClassesLoaded = false;
 
-    public PackageItem(String name) {
+    public PackageNode(String name) {
         this.name = name;
         getChildren().add(emptyItem);
         setGraphic(new ImageView(PACK_ICON));
     }
 
-    public PackageItem(String name, boolean areClassesLoaded) {
+    public PackageNode(String name, boolean areClassesLoaded) {
         this.areClassesLoaded = areClassesLoaded;
         this.name = name;
         setGraphic(new ImageView(PACK_ICON));
@@ -39,12 +39,12 @@ public class PackageItem extends Item {
     /**
      * @return all PackageItems that contain this.
      */
-    public PackageItem[] path() {
+    public PackageNode[] path() {
         String[] packs = name.split("\\.");
-        PackageItem[] path = new PackageItem[packs.length];
+        PackageNode[] path = new PackageNode[packs.length];
         String pName = "";
         for (int i = 0; i < path.length; i++) {
-            path[i] = new PackageItem(pName += packs[i]);
+            path[i] = new PackageNode(pName += packs[i]);
             pName += ".";
         }
         return path;
@@ -68,7 +68,7 @@ public class PackageItem extends Item {
         loadClasses();
     }
 
-    private static class EmptyItem extends Item {
+    private static class EmptyNode extends Node {
 
         @Override
         public String toString() {

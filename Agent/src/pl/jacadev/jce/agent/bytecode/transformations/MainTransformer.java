@@ -23,9 +23,6 @@ public class MainTransformer implements ClassFileTransformer {
         Agent.INSTRUMENTATION.redefineClasses(new ClassDefinition(aClass, AUtil.getBytesFromClass(aClass)));
     }
 
-    public static void restoreToDefault() {
-        MAIN_TRANSFORMER.transformer.set(DEFAULT_TRANSFORMER);
-    }
 
     private final ThreadLocal<ClassFileTransformer> transformer = new ThreadLocal<ClassFileTransformer>() {
         @Override

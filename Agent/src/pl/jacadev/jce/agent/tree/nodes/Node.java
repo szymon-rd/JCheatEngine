@@ -1,4 +1,4 @@
-package pl.jacadev.jce.agent.tree.items;
+package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
@@ -6,9 +6,9 @@ import javafx.scene.control.TreeItem;
 /**
  * @author JacaDev
  */
-public abstract class Item extends TreeItem<Item> {
+public abstract class Node extends TreeItem<Node> {
 
-    public Item() {
+    public Node() {
         addEventHandler(TreeItem.branchExpandedEvent(), objectTreeModificationEvent -> handleBranchExpansion());
         setValue(this);
     }

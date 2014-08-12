@@ -32,24 +32,6 @@ public class AttachUtil {
         vm.detach();
     }
 
-    /**
-     * @return bytes of stream
-     */
-    public static byte[] getBytes(InputStream stream) {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        try {
-            int nRead;
-            byte[] data = new byte[16384];
-            while ((nRead = stream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer.toByteArray();
-    }
-
     private static List<String> unattachableVMsPids = new ArrayList<>();
 
     static {
@@ -89,7 +71,7 @@ public class AttachUtil {
     }
 
     /**
-     * @return pid of this jvm.
+     * @return pid of current jvm.
      */
     public static String getCurrentPid() {
         String vm = ManagementFactory.getRuntimeMXBean().getName();
