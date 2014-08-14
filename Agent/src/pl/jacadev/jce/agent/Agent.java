@@ -20,6 +20,7 @@ public class Agent extends Application {
 
     public static final String VERSION = "0.2";
     public static final Locale LANGUAGE = Locale.ENGLISH;
+    public static final String NAME = "JCheatEngine";
 
     public static final ClassLoader SYSTEM_CLASS_LOADER = ClassLoader.getSystemClassLoader();
 
@@ -30,7 +31,7 @@ public class Agent extends Application {
         STAGE = primaryStage;
         Localization.setLocale(LANGUAGE);
         Parent root = FXMLLoader.load(getClass().getResource("res/agent.fxml"));
-        primaryStage.setTitle("JCheatEngine");
+        primaryStage.setTitle(NAME);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -56,9 +57,16 @@ public class Agent extends Application {
     public static void showWarn(String message){ //TODO implement
         Dialogs.create()
                 .owner(STAGE)
-                .title("Error")
+                .title("Warning")
                 .message(message)
                 .showWarning();
+    }
+    public static void showInfo(String title, String message){ //TODO implement
+        Dialogs.create()
+                .owner(STAGE)
+                .title(title)
+                .message(message)
+                .showInformation();
     }
 
     public static void main(String... args) {
