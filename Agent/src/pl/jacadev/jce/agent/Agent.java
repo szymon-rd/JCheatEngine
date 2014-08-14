@@ -19,6 +19,8 @@ import java.util.Locale;
 public class Agent extends Application {
 
     public static final String VERSION = "0.2";
+    public static final Locale LANGUAGE = Locale.ENGLISH;
+
     public static final ClassLoader SYSTEM_CLASS_LOADER = ClassLoader.getSystemClassLoader();
 
     public static Instrumentation INSTRUMENTATION;
@@ -26,10 +28,10 @@ public class Agent extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         STAGE = primaryStage;
+        Localization.setLocale(LANGUAGE);
         Parent root = FXMLLoader.load(getClass().getResource("res/agent.fxml"));
         primaryStage.setTitle("JCheatEngine");
         primaryStage.setScene(new Scene(root));
-        Localization.setLocale(Locale.ENGLISH);
         primaryStage.show();
     }
 
@@ -50,6 +52,13 @@ public class Agent extends Application {
                 .title("Error")
                 .message(message)
                 .showError();
+    }
+    public static void showWarn(String message){ //TODO implement
+        Dialogs.create()
+                .owner(STAGE)
+                .title("Error")
+                .message(message)
+                .showWarning();
     }
 
     public static void main(String... args) {
