@@ -2,6 +2,7 @@ package pl.jacadev.jce.agent.tree.nodes;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.res.Controller;
 
 import java.lang.reflect.Field;
@@ -20,7 +21,7 @@ public class FieldNode extends Node {
     public FieldNode(Field field, Object owner) {
         this.field = field;
         this.owner = owner;
-        if(isModifiable()) setGraphic(new ImageView(FIELD_ICON));
+        if (isModifiable()) setGraphic(new ImageView(FIELD_ICON));
         else setGraphic(new ImageView(U_FIELD_ICON));
     }
 
@@ -42,7 +43,7 @@ public class FieldNode extends Node {
         try {
             Controller.CONTROLLER.openField(field, owner);
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            Agent.showError(e.toString());
         }
     }
 

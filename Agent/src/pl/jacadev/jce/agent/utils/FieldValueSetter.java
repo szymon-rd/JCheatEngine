@@ -1,5 +1,6 @@
 package pl.jacadev.jce.agent.utils;
 
+import pl.jacadev.jce.agent.Agent;
 import sun.reflect.FieldAccessor;
 
 import java.lang.reflect.Field;
@@ -53,8 +54,7 @@ public class FieldValueSetter {
         try {
             field.set(owner, value);
         } catch (IllegalAccessException e) {
-            System.err.println("Exception! Name: " + field.getName() + " Modifiers: " + Modifier.toString(field.getModifiers()) + " Accessible: " + field.isAccessible());
-            e.printStackTrace();
+            Agent.showError(e.toString());
         }
     }
 

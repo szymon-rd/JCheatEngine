@@ -117,8 +117,8 @@ public class ClassNode extends Node {
                                 try {
                                     Tree.addObject(name, constructor.newInstance(parameters));
                                 } catch (ReflectiveOperationException e){
-                                    e.printStackTrace();
-                                }
+                                    Agent.showError(e.toString());
+                            }
                             }
                         };
 

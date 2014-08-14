@@ -1,5 +1,7 @@
 package pl.jacadev.jce.agent.utils;
 
+import pl.jacadev.jce.agent.Agent;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +33,7 @@ public class AUtil {
             }
             buffer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            Agent.showError(e.toString());
         }
         return buffer.toByteArray();
     }
