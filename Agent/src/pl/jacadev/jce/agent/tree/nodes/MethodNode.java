@@ -21,7 +21,7 @@ public class MethodNode extends Node {
 
     @Override
     void handleClick() {
-        Controller.CONTROLLER.openMethodMenu(method, null);
+        Controller.CONTROLLER.openMethodMenu(method);
     }
 
     @Override

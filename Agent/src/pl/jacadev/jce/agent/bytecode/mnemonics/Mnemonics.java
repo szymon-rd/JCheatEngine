@@ -25,7 +25,8 @@ public class Mnemonics {
     }
 
     private static Map<Class<?>, Character> descriptors = new HashMap<>();
-    static{
+
+    static {
         descriptors.put(void.class, 'V');
         descriptors.put(long.class, 'J');
         descriptors.put(int.class, 'I');
@@ -37,30 +38,31 @@ public class Mnemonics {
         descriptors.put(char.class, 'C');
     }
 
-    private static String getDesc(Class<?> type){
-        String desc = String.valueOf(descriptors.getOrDefault(type, null));
-        if(desc == null){
+    private static String getDesc(Class<?> type) {
+        String desc = String.valueOf(descriptors.getOrDefault(type, 'X'));
+        if (desc.equals("X")) {
             desc = "";
-            while (type.isArray()){
+            while (type.isArray()) {
                 type = type.getComponentType();
                 desc = "[" + desc;
             }
             desc += descriptors.getOrDefault(type, 'L');
-            if(desc.endsWith("L")){
-                desc += String.format("%s;", type.getCanonicalName());
+            if (desc.endsWith("L")) {
+                desc += String.format("%s;", type.getCanonicalName().replace('.', '/'));
             }
         }
         return desc;
     }
 
-    public static String getDesc(Method m){
+    public static String getDesc(Method m) {
         StringBuilder desc = new StringBuilder();
-        for(Class<?> type : m.getParameterTypes()){
+        for (Class<?> type : m.getParameterTypes()) {
             desc.append(getDesc(type));
         }
         return String.format("(%s)%s", desc, getDesc(m.getReturnType()));
     }
-    public static String getMethodMnemonics(Method method){
+
+    public static String getMethodMnemonics(Method method) {
         try {
             ClassNode classNode = ClassBytecodeGetter.toASMNode(method.getDeclaringClass());
             String m = method.getName() + getDesc(method);
@@ -70,21 +72,21 @@ public class Mnemonics {
         }
         return null;
     }
+
     private static String getMethodMnemonics(ClassNode classNode, String method) {
         String[] classMnemonics = Mnemonics.getClassMnemonics(classNode).split("\n");
-        Pattern methodPattern = Pattern.compile('*' + method);
-
         boolean isInsideMethod = false;
         StringBuilder methodMnemonics = new StringBuilder();
+        System.out.println(method);
         for (String mnemonic : classMnemonics) {
             if (!isInsideMethod
-                    && methodPattern.matcher(mnemonic).matches()) {
+                    && mnemonic.contains(method)) {
                 isInsideMethod = true;
             }
+
             if (isInsideMethod) {
-                if (mnemonic.length() > 0 && !Character.isUpperCase(mnemonic.charAt(0)))
-                    break;
-                methodMnemonics.append(mnemonic);
+                if (mnemonic.length() == 0) break;
+                methodMnemonics.append(mnemonic).append('\n');
             }
         }
         return methodMnemonics.toString();

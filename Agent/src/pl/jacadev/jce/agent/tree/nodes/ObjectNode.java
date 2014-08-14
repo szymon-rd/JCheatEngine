@@ -37,8 +37,6 @@ public class ObjectNode extends Node {
     }
 
     private void openFields() {
-        System.out.println(object.getClass());
-        System.out.println(object.getClass().getDeclaredFields());
         for (Field f : object.getClass().getDeclaredFields()) {
             if((f.getModifiers() & Modifier.STATIC) == 0) getChildren().add(new FieldNode(f, object));
         }

@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import pl.jacadev.jce.agent.Agent;
+import pl.jacadev.jce.agent.bytecode.mnemonics.Mnemonics;
 import pl.jacadev.jce.agent.tree.Tree;
 import pl.jacadev.jce.agent.tree.nodes.Node;
 import pl.jacadev.jce.agent.tree.nodes.ObjectNode;
@@ -170,13 +171,14 @@ public class Controller implements Initializable {
 
     private Method openedMethod;
 
-    public void openMethodMenu(Method method, byte[] bytecode) {
+    public void openMethodMenu(Method method) {
         Objects.nonNull(method);
         fieldPanel.setVisible(false);
         methodPanel.setVisible(true);
 
         methodName.setText(method.getName());
         methodModifiers.setText(Modifier.toString(method.getModifiers()));
+        codeArea.setText(Mnemonics.getMethodMnemonics(method));
     }
 
     @Override
