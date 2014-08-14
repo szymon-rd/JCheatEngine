@@ -28,7 +28,7 @@ public class TreeUtil {
      * @return true if class should be visible for user.
      */
     private static boolean isVisible(String path) {
-        return !path.startsWith("pl.jacadev.jce") && !path.startsWith("javafx") && !path.startsWith("sun");
+        return !path.startsWith("pl.jacadev");
     }
 
     /**
