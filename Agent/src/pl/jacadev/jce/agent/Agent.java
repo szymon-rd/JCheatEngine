@@ -22,8 +22,6 @@ public class Agent extends Application {
     public static final Locale LANGUAGE = Locale.ENGLISH;
     public static final String NAME = "JCheatEngine";
 
-    public static final ClassLoader SYSTEM_CLASS_LOADER = ClassLoader.getSystemClassLoader();
-
     public static Instrumentation INSTRUMENTATION;
     public static Stage STAGE;
     @Override
