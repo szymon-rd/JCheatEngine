@@ -29,7 +29,7 @@ public class ClassBytecodeGetter implements ClassFileTransformer {
         return classBytes.get();
     }
 
-    private static final int READ_FLAGS = SKIP_FRAMES & SKIP_DEBUG;
+    private static final int READ_FLAGS = SKIP_FRAMES | SKIP_DEBUG;
     public static ClassNode toASMNode(Class<?> aClass) throws UnmodifiableClassException, ClassNotFoundException {
         ClassReader classReader = new ClassReader(getBytes(aClass));
         ClassNode classNode = new ClassNode(Opcodes.ASM5);

@@ -26,6 +26,12 @@
                         <Font name="System Italic" size="10.0" />
                      </font>
                   </Label>
+                  <MenuButton layoutX="659.0" layoutY="18.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="More" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="14.0">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>

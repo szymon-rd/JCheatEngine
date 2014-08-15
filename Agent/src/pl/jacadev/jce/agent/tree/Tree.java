@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import pl.jacadev.jce.agent.tree.nodes.JCETreeCell;
 import pl.jacadev.jce.agent.tree.nodes.Node;
 import pl.jacadev.jce.agent.tree.nodes.ObjectNode;
 import pl.jacadev.jce.agent.tree.nodes.PackageNode;
@@ -25,8 +26,8 @@ public class Tree {
 
     @SuppressWarnings("unchecked")
     public static void createTree(TreeView<Node> classes, TreeView<Node> objects) {
-        classes.setCellFactory(itemTreeView -> new pl.jacadev.jce.agent.tree.nodes.JCETreeCell());
-        objects.setCellFactory(itemTreeView -> new pl.jacadev.jce.agent.tree.nodes.JCETreeCell());
+        classes.setCellFactory(itemTreeView -> new JCETreeCell());
+        objects.setCellFactory(itemTreeView -> new JCETreeCell());
         Node classesRoot = new TextNode("Loaded classes");
         classesRoot.setExpanded(true);
         Node objectsRoot = new TextNode("Objects");
