@@ -14,11 +14,10 @@ import java.util.ArrayList;
 public class SystemClassLoader {
 
     public static final URLClassLoader SYSTEM_CLASS_LOADER = (URLClassLoader) ClassLoader.getSystemClassLoader();
-    public static final Class<URLClassLoader> SYSTEM_CL_CLASS = URLClassLoader.class;
 
     public static void addUrl(URL url){
         try {
-            Method method = SYSTEM_CL_CLASS.getDeclaredMethod("addURL", URL.class);
+            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             method.invoke(SYSTEM_CLASS_LOADER, url);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -30,7 +29,7 @@ public class SystemClassLoader {
         try {
             Method method = ClassLoader.class.getDeclaredMethod("defineClass", byte[].class, int.class, int.class);
             method.setAccessible(true);
-            method.invoke(SYSTEM_CLASS_LOADER, code, 0, code.length - 1);
+            method.invoke(SYSTEM_CLASS_LOADER, code, 0, code.length);
         } catch (ReflectiveOperationException e) {
             Agent.showError(e.toString());
         }
