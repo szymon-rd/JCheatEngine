@@ -11,7 +11,6 @@ import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * @author JacaDev
@@ -68,7 +67,7 @@ public class Mnemonics {
             String m = method.getName() + getDesc(method);
             return getMethodMnemonics(classNode, m);
         } catch (UnmodifiableClassException | ClassNotFoundException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
         return null;
     }

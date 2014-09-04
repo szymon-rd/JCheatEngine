@@ -12,7 +12,7 @@ public class JCETreeCell extends TreeCell<Node> {
 
     public JCETreeCell() {
         addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if(!isNull()) getItem().handleClick();
+            if (!containsNull()) getItem().handleClick();
         });
     }
 
@@ -31,7 +31,7 @@ public class JCETreeCell extends TreeCell<Node> {
         }
     }
 
-    public boolean isNull(){
+    public boolean containsNull(){
         return getItem() == null;
     }
 

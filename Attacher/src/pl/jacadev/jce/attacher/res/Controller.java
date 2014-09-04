@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import pl.jacadev.jce.attacher.AttachUtil;
 import pl.jacadev.jce.attacher.JCEAttacher;
 import pl.jacadev.jce.attacher.VM;
@@ -24,14 +25,21 @@ public class Controller implements Initializable {
     private TableColumn<VM, String> nameColumn;
 
     @FXML
+    private CheckBox onlyProvided;
+
+    @FXML
     private Button attachBtn;
-    Tooltip attachBtnTip;
 
     @FXML
     private TableView<VM> table;
 
     @FXML
     private TableColumn<VM, String> pidColumn;
+
+    @FXML
+    void handleOnlyProvidedChangeAction(MouseEvent event) {
+        handleRefreshAction(null);
+    }
 
     @FXML
     void handleAttachAction(ActionEvent event) {
@@ -49,12 +57,12 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleRefreshAction(ActionEvent event) {
-        table.setItems(AttachUtil.getAttachableVMs());
+        table.setItems(AttachUtil.getAttachableVMs(onlyProvided.isSelected()));
     }
 
     @FXML
     public void handleUpdate(ActionEvent event) {
-
+        //TODO Update
     }
 
     @Override

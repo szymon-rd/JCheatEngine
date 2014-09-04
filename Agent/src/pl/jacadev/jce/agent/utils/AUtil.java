@@ -33,7 +33,7 @@ public class AUtil {
             }
             buffer.flush();
         } catch (IOException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
         return buffer.toByteArray();
     }

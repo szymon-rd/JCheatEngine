@@ -14,12 +14,13 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import pl.jacadev.jce.agent.Agent;
 import pl.jacadev.jce.agent.res.Controller;
-import pl.jacadev.jce.agent.tree.*;
+import pl.jacadev.jce.agent.tree.Tree;
+import pl.jacadev.jce.agent.tree.TreeUtil;
 import pl.jacadev.jce.agent.utils.FieldValueSetter;
 
-import javax.swing.tree.TreeNode;
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,7 +35,7 @@ public class ClassNode extends Node {
     private static final Image ABSTRACT_ICON = new Image(Controller.class.getResourceAsStream("icons/abstractIcon.png"));
 
     private static enum Type {
-        CLASS(CLASS_ICON, true), ENUM(ENUM_ICON, false), INTERFACE(INTERFACE_ICON, false), ANNOTATION(ANNOTATION_ICON, false),
+        CLASS(CLASS_ICON, true), ENUM(ENUM_ICON, true), INTERFACE(INTERFACE_ICON, false), ANNOTATION(ANNOTATION_ICON, false),
         ABSTRACT(ABSTRACT_ICON, false);
 
         private Image image;
@@ -50,12 +51,13 @@ public class ClassNode extends Node {
     private final Class aClass;
     private boolean isLoaded = false;
     private final boolean constructable;
+    private final Type type;
 
     public ClassNode(Class aClass) {
         this.aClass = aClass;
-        Type type = getType(aClass);
-        this.constructable = type.constructable;
-        setGraphic(new ImageView(type.image));
+        this.type = getType(aClass);
+        this.constructable = this.type.constructable;
+        setGraphic(new ImageView(this.type.image));
     }
 
     public Class getAClass() {
@@ -85,75 +87,133 @@ public class ClassNode extends Node {
         }
     }
 
-    private void newInstance() {
+    public void newInstance() {
         if (constructable) {
-            Constructor[] constrs = aClass.getDeclaredConstructors();
-            ((constrs.length > 1) ?
-                    Dialogs.create()
-                            .owner(Agent.STAGE)
-                            .title("New instance")
-                            .message("Select constructor:")
-                            .showChoices(Arrays.asList(constrs))
-                    : Optional.of(constrs[0]))
-                    .ifPresent(constructor -> {
-                        final Control[] parameterPools = new Control[constructor.getParameterCount()];
+            switch (this.type) {
+                case CLASS:
+                    newClassInstance();
+                    break;
+                case ENUM:
+                    newEnumInstance();
+            }
+        } else throw new Error("Cannot create new instance of this class");
+    }
 
-                        Action actionNew = new AbstractAction("New") {
-                            public void handle(ActionEvent event) {
-                                Dialog d = (Dialog) event.getSource();
-                                Optional<String> name = Dialogs.create()
+    private void newEnumInstance() {
+        List<Field> fields = Arrays.asList(Arrays.stream(aClass.getDeclaredFields())
+                .filter(field -> !Modifier.isStatic(field.getModifiers()) && !field.isEnumConstant())
+                .toArray(Field[]::new));
+        showMultipleInput(
+                fields.stream().map(Field::getName).toArray(String[]::new),
+                fields.stream().map(Field::getType).toArray(Class<?>[]::new),
+                "New instance", "Insert initial field values")
+                .ifPresent(values -> showMultipleInput(
+                        new String[]{"Name:", "Ordinal:"},
+                        new Class<?>[]{String.class, int.class},
+                        "New instance", "Insert enum instance attributes:")
+                        .ifPresent(attributes -> {
+                            try {
+                                Object enumInstance = Agent.UNSAFE.allocateInstance(aClass);
+                                Field[] declaredFields = (Field[]) fields.toArray();
+                                for (int i = 0; i < declaredFields.length; i++) {
+                                    Field field = declaredFields[i];
+                                    field.setAccessible(true);
+                                    field.set(enumInstance, values[i]);
+                                }
+                                Field name = Enum.class.getDeclaredField("name");
+                                Field ordinal = Enum.class.getDeclaredField("ordinal");
+                                name.setAccessible(true);
+                                ordinal.setAccessible(true);
+                                name.set(enumInstance, attributes[0]);
+                                ordinal.set(enumInstance, attributes[1]);
+                                Tree.addObject((String) attributes[0], enumInstance);
+                            } catch (ReflectiveOperationException e) {
+                                Agent.handleException(e);
+                            }
+                        }));
+    }
+
+    private void newClassInstance() {
+        Constructor[] constrs = aClass.getDeclaredConstructors();
+        ((constrs.length > 1) ?
+                Dialogs.create()
+                        .owner(Agent.STAGE)
+                        .title("New instance")
+                        .message("Select constructor:")
+                        .showChoices(Arrays.asList(constrs))
+                : Optional.of(constrs[0]))
+                .ifPresent(constructor ->
+                        showMultipleInput(
+                                Arrays.stream(constructor.getParameters()).map(Parameter::getName).toArray(String[]::new),
+                                constructor.getParameterTypes(),
+                                "New instance",
+                                "Insert constructor parameters"
+                        ).ifPresent(parameters ->
+                                Dialogs.create()
                                         .owner(Agent.STAGE)
                                         .title("New instance")
-                                        .message("Enter name:")
-                                        .showTextInput();
-                                name.ifPresent( a ->
-                                        createNew(a, TreeUtil.getValues(parameterPools, constructor.getParameterTypes()))
-                                );
-                                d.hide();
-                            }
+                                        .message("Enter name")
+                                        .showTextInput()
+                                        .ifPresent(name -> {
+                                            try {
+                                                Object instance = constructor.newInstance(parameters);
+                                                Tree.addObject(name, instance);
+                                            } catch (ReflectiveOperationException e) {
+                                                Agent.handleException(e);
+                                            }
+                                        })));
+    }
 
-                            private void createNew(String name, Object[] parameters) {
-                                constructor.setAccessible(true);
-                                try {
-                                    Tree.addObject(name, constructor.newInstance(parameters));
-                                } catch (ReflectiveOperationException e){
-                                    Agent.showError(e.toString());
-                            }
-                            }
-                        };
+    @SuppressWarnings("unchecked")
+    public static Optional<Object[]> showMultipleInput(String[] names, Class<?>[] types, String dialogName, String masthead) {
+        final Control[] inputControls = new Control[types.length];
+        Dialog dlg = new Dialog(Agent.STAGE, dialogName);
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 10));
+        final Optional[] toReturn = {Optional.empty()};
 
-                        Dialog dlg = new Dialog(Agent.STAGE, "New instance");
-                        GridPane grid = new GridPane();
-                        grid.setHgap(10);
-                        grid.setVgap(10);
-                        grid.setPadding(new Insets(0, 10, 0, 10));
+        Action actionOk = new AbstractAction("Ok") {
+            @Override
+            public void handle(ActionEvent event) {
+                toReturn[0] = Optional.of(TreeUtil.getValues(inputControls, types));
+                dlg.hide();
+            }
+        };
+        Action actionCancel = new AbstractAction("Cancel") {
+            @Override
+            public void handle(ActionEvent event) {
+                dlg.hide();
+            }
+        };
 
-                        Parameter[] parameters = constructor.getParameters();
-                        for (int i = 0; i < parameters.length; i++) {
-                            Parameter parameter = parameters[i];
-                            grid.add(new Label(parameter.getName()), 0, i);
-                            Control parameterIn;
-                            if (FieldValueSetter.isParsable(parameter.getType())) {
-                                TextField parameterField = new TextField();
-                                parameterField.setPromptText(parameter.getType().getSimpleName());
-                                parameterIn = parameterField;
-                            } else {
-                                ComboBox<ObjectNode> combo = new ComboBox<>();
-                                combo.setPromptText(parameter.getType().getSimpleName());
-                                combo.setItems(FXCollections.observableArrayList(Tree.getItems(parameter.getType())));
-                                parameterIn = null;
-                            }
-                            grid.add(parameterIn, 1, i);
-                            parameterPools[i] = parameterIn;
-                        }
+        for (int i = 0; i < types.length; i++) {
+            Class<?> type = types[i];
+            grid.add(new Label(names[i]), 0, i);
+            Control input;
+            if (FieldValueSetter.isParsable(type)) {
+                TextField textInputField = new TextField();
+                textInputField.setPromptText(type.getSimpleName());
+                input = textInputField;
+            } else {
+                ComboBox<ObjectNode> combo = new ComboBox<>();
+                combo.setPromptText(type.getSimpleName());
+                combo.setItems(FXCollections.observableArrayList(Tree.getItems(type)));
+                input = combo;
+            }
+            grid.add(input, 1, i);
+            inputControls[i] = input;
+        }
 
-                        ButtonBar.setType(actionNew, ButtonBar.ButtonType.OK_DONE);
-                        dlg.setMasthead("Create new instance of class " + toString());
-                        dlg.setContent(grid);
-                        dlg.getActions().addAll(actionNew, Dialog.Actions.CANCEL);
-                        dlg.show();
-                    });
-        } else throw new Error("Can not create new instance of this class");
+        dlg.setMasthead(masthead);
+        dlg.setContent(grid);
+        ButtonBar.setType(actionOk, ButtonBar.ButtonType.OK_DONE);
+        ButtonBar.setType(actionCancel, ButtonBar.ButtonType.CANCEL_CLOSE);
+        dlg.getActions().addAll(actionOk, actionCancel);
+        dlg.show();
+
+        return toReturn[0];
     }
 
     private void openFields() {
@@ -167,6 +227,7 @@ public class ClassNode extends Node {
             getChildren().add(new MethodNode(m));
         }
     }
+
     private static Type getType(Class<?> aClass) {
         if (aClass.isAnnotation()) return Type.ANNOTATION;
         if (aClass.isEnum()) return Type.ENUM;

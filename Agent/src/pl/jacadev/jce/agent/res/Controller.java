@@ -85,7 +85,7 @@ public class Controller implements Initializable {
             if (isPrimitive(openedField)) FieldValueSetter.setField(openedObject, openedField, fieldValue.getText());
             else FieldValueSetter.setField(openedObject, openedField, fieldValueChoice.getValue().getObject());
         } catch (Exception e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 
@@ -99,7 +99,7 @@ public class Controller implements Initializable {
         try {
             openField(openedField, openedObject);
         } catch (ReflectiveOperationException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 
@@ -108,7 +108,7 @@ public class Controller implements Initializable {
         try {
             Tree.addObject(openedField.get(openedObject));
         } catch (IllegalAccessException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 

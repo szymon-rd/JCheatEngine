@@ -13,7 +13,6 @@ public class PackageNode extends Node {
     private final EmptyNode emptyItem = new EmptyNode();
     private final String name;
     private boolean areClassesLoaded = false;
-
     public PackageNode(String name) {
         this.name = name;
         getChildren().add(emptyItem);
@@ -60,7 +59,19 @@ public class PackageNode extends Node {
             getChildren().remove(emptyItem);
             getChildren().addAll(ApplicationMap.getClasses(this));
             areClassesLoaded = true;
+            sort();
         }
+    }
+    public void sort(){
+        getChildren().sort((o1, o2) -> {
+            if(!((o1 instanceof PackageNode) ^ (o2 instanceof PackageNode))){
+                return String.CASE_INSENSITIVE_ORDER.compare(o1.toString(), o2.toString());
+            }else if(o1 instanceof PackageNode){
+                return 1;
+            }else{
+                return -1;
+            }
+        });
     }
 
     @Override

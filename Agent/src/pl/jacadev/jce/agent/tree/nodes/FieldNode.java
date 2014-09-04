@@ -43,7 +43,7 @@ public class FieldNode extends Node {
         try {
             Controller.CONTROLLER.openField(field, owner);
         } catch (ReflectiveOperationException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 

@@ -8,9 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 import pl.jacadev.jce.agent.bytecode.transformations.MainTransformer;
+import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
 
 /**
@@ -23,6 +25,17 @@ public class Agent extends Application {
     public static final String NAME = "JCheatEngine";
 
     public static Instrumentation INSTRUMENTATION;
+    public static final Unsafe UNSAFE; static {
+        Unsafe toSet = null;
+        try {
+            Constructor<Unsafe> constructor = Unsafe.class.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            toSet = constructor.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        UNSAFE = toSet;
+    }
     public static Stage STAGE;
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -44,7 +57,9 @@ public class Agent extends Application {
     public static void killAgent() {
         INSTRUMENTATION.removeTransformer(MainTransformer.MAIN_TRANSFORMER);
     }
-
+    public static void handleException(Exception e){
+        showError(e.toString());
+    }
     public static void showError(String message){ //TODO implement
         Dialogs.create()
                 .owner(STAGE)
@@ -70,4 +85,5 @@ public class Agent extends Application {
     public static void main(String... args) {
         launch();
     }
+
 }

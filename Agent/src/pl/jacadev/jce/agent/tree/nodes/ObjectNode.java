@@ -25,11 +25,13 @@ public class ObjectNode extends Node {
     private Object object;
 
     public ObjectNode(String name, Object object) {
+        System.out.println(object.getClass());
         Objects.requireNonNull(object);
         setGraphic(new ImageView(OBJECT_ICON));
         this.name = name;
         this.object = object;
         openFields();
+
     }
 
     public ObjectNode(Object object) {

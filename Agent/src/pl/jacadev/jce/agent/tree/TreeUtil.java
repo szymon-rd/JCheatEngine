@@ -50,7 +50,7 @@ public class TreeUtil {
     /**
      * @return values of controls
      */
-    public static Object[] getValues(Control[] controls, Class[] types) {
+    public static Object[] getValues(Control[] controls, Class<?>[] types) {
         Object[] values = new Object[controls.length];
         for (int i = 0; i < controls.length; i++) {
             Control control = controls[i];

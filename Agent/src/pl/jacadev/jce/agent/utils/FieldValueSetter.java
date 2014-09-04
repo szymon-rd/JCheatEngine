@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @author JacaDev
  */
 public class FieldValueSetter {
-    private static Map<Class, Function<String, Object>> parsers = new HashMap<>();
+    private static Map<Class<?>, Function<String, ?>> parsers = new HashMap<>();
 
     static {
         parsers.put(long.class, Long::valueOf);
@@ -54,7 +54,7 @@ public class FieldValueSetter {
         try {
             field.set(owner, value);
         } catch (IllegalAccessException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 
@@ -69,7 +69,6 @@ public class FieldValueSetter {
             Field readOnly = accessor.getClass().getSuperclass().getDeclaredField("isReadOnly");
             readOnly.setAccessible(true);
             readOnly.set(accessor, false);
-
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
@@ -80,11 +79,16 @@ public class FieldValueSetter {
         return parsers.containsKey(type);
     }
 
-    public static Object parse(String value, Class<?> type) {
-        return parsers.getOrDefault(type,
-                string -> {
-                    throw new Error("Unparsable type: " + type.getSimpleName());
-                }).apply(value);
+    @SuppressWarnings("unchecked")
+    public static Object parse(String value, Class type) {
+        try {
+            return parsers.getOrDefault(type,
+                    string -> {
+                        throw new Error("Unparsable type: " + type.getSimpleName());
+                    }).apply(value);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
 

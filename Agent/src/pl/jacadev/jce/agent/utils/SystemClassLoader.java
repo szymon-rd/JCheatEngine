@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 
 /**
  * Created by oem on 15.08.14.
@@ -21,7 +20,7 @@ public class SystemClassLoader {
             method.setAccessible(true);
             method.invoke(SYSTEM_CLASS_LOADER, url);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 
@@ -31,7 +30,7 @@ public class SystemClassLoader {
             method.setAccessible(true);
             method.invoke(SYSTEM_CLASS_LOADER, code, 0, code.length);
         } catch (ReflectiveOperationException e) {
-            Agent.showError(e.toString());
+            Agent.handleException(e);
         }
     }
 }

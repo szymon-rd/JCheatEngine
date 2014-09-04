@@ -9,13 +9,9 @@ import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sun.tools.attach.HotSpotAttachProvider;
 import sun.tools.attach.WindowsAttachProvider;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,13 +45,20 @@ public class AttachUtil {
     /**
      * @return running jvms excluding this and already attached ones.
      */
-    public static ObservableList<VM> getAttachableVMs() {
+    public static ObservableList<VM> getAttachableVMs(boolean onlyProvided) {
+        if(onlyProvided){
+            return FXCollections.observableArrayList(VirtualMachine.list().stream()
+                    .map(desc -> new VM(desc.displayName(), desc.id()))
+                    .filter(vm -> !unattachableVMsPids.contains(vm.getPid()))
+                    .toArray(VM[]::new));
+        }else{
         ObservableList<VM> vms = FXCollections.observableArrayList();
         for (VirtualMachineDescriptor desc : listVMs()) {
             if (!unattachableVMsPids.contains(desc.id()))
                 vms.add(new VM(desc.displayName().split(" ")[0], desc.id()));
         }
         return vms;
+        }
     }
 
     public static List<VirtualMachineDescriptor> listVMs(){
