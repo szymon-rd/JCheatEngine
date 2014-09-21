@@ -39,7 +39,7 @@ public class Tree {
     }
 
     private static void loadPackages() {
-        for (String s : ApplicationMap.getPackages()) {
+        for (String s : ApplicationContent.getPackages()) {
             putPackage(s);
         }
         createDefaultPackage();
@@ -47,7 +47,7 @@ public class Tree {
 
     private static void createDefaultPackage() {
         PackageNode defaultPack = new PackageNode("<default>", true);
-        defaultPack.getChildren().addAll(ApplicationMap.getClassesInDefaultPackage());
+        defaultPack.getChildren().addAll(ApplicationContent.getClassesInDefaultPackage());
         if(!defaultPack.getChildren().isEmpty()) classes.getChildren().add(defaultPack);
         defaultPack.sort();
     }
@@ -81,7 +81,8 @@ public class Tree {
     }
     public static ObjectNode[] getItems(Class<?> type){
         return objects.getChildren().stream()
-                .filter(a -> ((ObjectNode) a).getType().isAssignableFrom(type)).toArray(ObjectNode[]::new);
+                .filter(a -> ((ObjectNode) a).getType().isAssignableFrom(type))
+                .toArray(ObjectNode[]::new);
     }
 
     public static void addObject(Object object) {

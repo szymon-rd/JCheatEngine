@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * @author JacaDev
  */
-public class ApplicationMap {
+public class ApplicationContent {
     public static String[] getPackages() {
         Class[] classes = TreeUtil.getLoadedClasses();
         String[] packages = new String[classes.length];

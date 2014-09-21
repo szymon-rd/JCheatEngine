@@ -3,7 +3,7 @@ package pl.jacadev.jce.agent.tree.nodes;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import pl.jacadev.jce.agent.res.Controller;
-import pl.jacadev.jce.agent.tree.ApplicationMap;
+import pl.jacadev.jce.agent.tree.ApplicationContent;
 
 /**
  * @author JacaDev
@@ -57,7 +57,7 @@ public class PackageNode extends Node {
     public void loadClasses() {
         if (!areClassesLoaded) {
             getChildren().remove(emptyItem);
-            getChildren().addAll(ApplicationMap.getClasses(this));
+            getChildren().addAll(ApplicationContent.getClasses(this));
             areClassesLoaded = true;
             sort();
         }

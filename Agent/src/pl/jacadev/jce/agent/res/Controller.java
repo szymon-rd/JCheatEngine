@@ -26,6 +26,17 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     public static Controller CONTROLLER;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        CONTROLLER = this;
+        version.setText("v " + Agent.VERSION);
+        Tree.createTree(classesTree, objectsTree);
+    }
+
+    /**
+     * MAIN
+     */
+
     @FXML
     Label version;
 
@@ -34,6 +45,12 @@ public class Controller implements Initializable {
 
     @FXML
     private TreeView<Node> objectsTree;
+
+    @FXML
+    void handleRefreshClasses(ActionEvent event) {
+        Tree.reloadClassesTree();
+    }
+
 
     /**
      * METHOD PANEL
@@ -50,6 +67,19 @@ public class Controller implements Initializable {
 
     @FXML
     private Label methodModifiers;
+
+
+    private Method openedMethod;
+
+    public void openMethodMenu(Method method) {
+        Objects.nonNull(method);
+        fieldPanel.setVisible(false);
+        methodPanel.setVisible(true);
+
+        methodName.setText(method.getName());
+        methodModifiers.setText(Modifier.toString(method.getModifiers()));
+        codeArea.setText(Mnemonics.getMethodMnemonics(method));
+    }
 
     /**
      * FIELD PANEL
@@ -87,11 +117,6 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             Agent.handleException(e);
         }
-    }
-
-    @FXML
-    void handleRefreshClasses(ActionEvent event) {
-        Tree.reloadClassesTree();
     }
 
     @FXML
@@ -169,23 +194,20 @@ public class Controller implements Initializable {
         return FieldValueSetter.isParsable(field.getType());
     }
 
-    private Method openedMethod;
+    /**
+     * MORE LIST
+     */
 
-    public void openMethodMenu(Method method) {
-        Objects.nonNull(method);
-        fieldPanel.setVisible(false);
-        methodPanel.setVisible(true);
+    @FXML
+    void handleAttachSource(ActionEvent event) {
 
-        methodName.setText(method.getName());
-        methodModifiers.setText(Modifier.toString(method.getModifiers()));
-        codeArea.setText(Mnemonics.getMethodMnemonics(method));
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        CONTROLLER = this;
-        version.setText("v " + Agent.VERSION);
-        Tree.createTree(classesTree, objectsTree);
+    @FXML
+    void handleExecuteCode(ActionEvent event) {
+
     }
+
+
 
 }

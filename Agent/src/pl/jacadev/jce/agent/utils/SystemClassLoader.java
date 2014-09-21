@@ -24,13 +24,9 @@ public class SystemClassLoader {
         }
     }
 
-    public static void defineClass(String name, byte[] code){
-        try {
-            Method method = ClassLoader.class.getDeclaredMethod("defineClass", byte[].class, int.class, int.class);
-            method.setAccessible(true);
-            method.invoke(SYSTEM_CLASS_LOADER, code, 0, code.length);
-        } catch (ReflectiveOperationException e) {
-            Agent.handleException(e);
-        }
+    public static void defineClass(String name, byte[] code) throws ReflectiveOperationException {
+        Method method = ClassLoader.class.getDeclaredMethod("defineClass", byte[].class, int.class, int.class);
+        method.setAccessible(true);
+        method.invoke(SYSTEM_CLASS_LOADER, code, 0, code.length);
     }
 }

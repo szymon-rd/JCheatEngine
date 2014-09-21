@@ -26,10 +26,10 @@
                         <Font name="System Italic" size="10.0" />
                      </font>
                   </Label>
-                  <MenuButton layoutX="659.0" layoutY="18.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="More" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="14.0">
+                  <MenuButton layoutX="683.0" layoutY="18.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="More" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="14.0">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                      <MenuItem mnemonicParsing="false" text="Run code" />
+                        <MenuItem mnemonicParsing="false" text="Load outer classes" />
                     </items>
                   </MenuButton>
                </children></AnchorPane>
@@ -62,6 +62,7 @@
                                   </Tab>
                                 </tabs>
                               </TabPane>
+                              <Label layoutX="1.0" layoutY="456.0" opacity="0.6" prefHeight="15.0" prefWidth="75.0" text="By JacaDev" textFill="#0000009b" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

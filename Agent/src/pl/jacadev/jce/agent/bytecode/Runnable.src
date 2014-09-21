@@ -1,0 +1,6 @@
+public class RunnableCode {
+    static void load(){};
+    public void run() {
+
+    }
+}

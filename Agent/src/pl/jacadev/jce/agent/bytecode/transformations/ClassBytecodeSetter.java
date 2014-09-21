@@ -10,13 +10,19 @@ import java.security.ProtectionDomain;
  */
 public class ClassBytecodeSetter implements ClassFileTransformer {
     static final ClassBytecodeSetter BYTECODE_SETTER = new ClassBytecodeSetter();
-    private ClassBytecodeSetter(){}
 
-    public static void setBytes(Class aClass) throws UnmodifiableClassException, ClassNotFoundException {
-        MainTransformer.redefineWith(BYTECODE_SETTER, aClass);
+    private ClassBytecodeSetter() {
+    }
+
+    public static void setBytes(Class aClass, byte[] bytes) throws UnmodifiableClassException, ClassNotFoundException {
+        synchronized (aClass) {
+            toSet.set(bytes);
+            MainTransformer.redefineWith(BYTECODE_SETTER, aClass);
+        }
     }
 
     private static final ThreadLocal<byte[]> toSet = new ThreadLocal<>();
+
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         return toSet.get();
